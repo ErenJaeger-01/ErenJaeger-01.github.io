@@ -22,25 +22,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"erenjaeger-01.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="博学慎思，参天尽物">
-<meta property="og:type" content="website">
-<meta property="og:title" content="KxZhang&#39;s Blog">
-<meta property="og:url" content="https://erenjaeger-01.github.io/archives/index.html">
+    <meta name="description" content="又是梯度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机视觉系列（二）：图像梯度">
+<meta property="og:url" content="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/index.html">
 <meta property="og:site_name" content="KxZhang&#39;s Blog">
-<meta property="og:description" content="博学慎思，参天尽物">
+<meta property="og:description" content="又是梯度">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/imgGradient/2.png">
+<meta property="article:published_time" content="2022-05-01T03:16:01.000Z">
+<meta property="article:modified_time" content="2022-05-04T01:19:40.277Z">
 <meta property="article:author" content="张凯翔">
+<meta property="article:tag" content="Computer Version">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/imgGradient/2.png">
 
 
-<link rel="canonical" href="https://erenjaeger-01.github.io/archives/">
+<link rel="canonical" href="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/","path":"2022/05/01/计算机视觉系列（二）：图像梯度/","title":"计算机视觉系列（二）：图像梯度"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>归档 | KxZhang's Blog</title>
+<title>计算机视觉系列（二）：图像梯度 | KxZhang's Blog</title>
   
 
 
@@ -70,7 +75,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">KxZhang's Blog</h1>
+      <p class="site-title">KxZhang's Blog</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Like a giddy planet beside a burning star.</p>
@@ -130,7 +135,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -143,6 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">图像梯度的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6%E7%9A%84%E6%B1%82%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">图像梯度的求解</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -205,89 +211,122 @@
 </noscript>
 
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 3 篇日志。 继续努力。</span>
-      </div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/author.png">
+      <meta itemprop="name" content="张凯翔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KxZhang's Blog">
+      <meta itemprop="description" content="博学慎思，参天尽物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="计算机视觉系列（二）：图像梯度 | KxZhang's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机视觉系列（二）：图像梯度
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-05-01 11:16:01" itemprop="dateCreated datePublished" datetime="2022-05-01T11:16:01+08:00">2022-05-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-04 09:19:40" itemprop="dateModified" datetime="2022-05-04T09:19:40+08:00">2022-05-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Computer-Version/" itemprop="url" rel="index"><span itemprop="name">Computer Version</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="图像梯度的概念">图像梯度的概念</h2>
+<p>图像梯度是指图像某像素在x和y两个方向上的变化率（与相邻像素比较），是一个二维向量，由2个分量组成X轴的变化、Y轴的变化。其中： * X轴的变化是指当前像素右侧（X加1）的像素值减去当前像素左侧（X减1）的像素值； * Y轴的变化是当前像素下方（Y加1）的像素值减去当前像素上方（Y减1）的像素值； 计算出来这两个分量，会形成一个二维向量，该向量描述了当前像素点的梯度。对这个向量取反正切函数 <strong><em>arctan</em></strong> ，可以得到梯度的角度。</p>
+<h2 id="图像梯度的求解">图像梯度的求解</h2>
+<p>图像梯度的求解过程可以用一个卷积核来实现：[-1,0,1]。</p>
+<p><span class="math inline">\(\nabla{f(x,y)}=\)</span> <span class="math inline">\(\left [ \begin{matrix} g_x\\g_y \end{matrix} \right]=\)</span> <span class="math inline">\(\left [ \begin{matrix} \frac{\partial f}{\partial x}\\ \frac{\partial f}{\partial y} \end{matrix} \right]=\)</span> <span class="math inline">\(\left [ \begin{matrix} f(x+1,y)-f(x-1,y)\\f(x,y+1)-f(x,y-1) \end{matrix} \right]\)</span></p>
+<figure>
+<img src="./imgGradient/2.png" alt="gradient" /><figcaption aria-hidden="true">gradient</figcaption>
+</figure>
+<p><span class="math inline">\(\nabla{f(x,y)}=\)</span> <span class="math inline">\(\left [ \begin{matrix} f(x+1,y)-f(x-1,y)\\f(x,y+1)-f(x,y-1) \end{matrix} \right]=\)</span> <span class="math inline">\(\left [ \begin{matrix} 55-105\\90-40 \end{matrix} \right]=\)</span> <span class="math inline">\(\left [ \begin{matrix} -50\\ 50 \end{matrix} \right]\)</span></p>
+<p>图像梯度的绝对值为：</p>
+<p><span class="math inline">\(\sqrt{50^2+(-50)^2}=70.7107\)</span></p>
+<p>图像梯度的角度为：</p>
+<p><span class="math inline">\(\arctan(-50/50)=-45^\circ\)</span></p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2022-05-01T18:11:28+08:00"
-              content="2022-05-01">
-          05-01
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/" itemprop="url">
-            <span itemprop="name">计算机视觉系列（一）：图像金字塔</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Computer-Version/" rel="tag"># Computer Version</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/05/01/OpenCv%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" rel="prev" title="OpenCv常用函数总结">
+                  <i class="fa fa-chevron-left"></i> OpenCv常用函数总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/" rel="next" title="计算机视觉系列（一）：图像金字塔">
+                  计算机视觉系列（一）：图像金字塔 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2022-05-01T11:16:01+08:00"
-              content="2022-05-01">
-          05-01
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/" itemprop="url">
-            <span itemprop="name">计算机视觉系列（二）：图像梯度</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2022-05-01T08:46:38+08:00"
-              content="2022-05-01">
-          05-01
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/05/01/OpenCv%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" itemprop="url">
-            <span itemprop="name">OpenCv常用函数总结</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
 
 </div>
   </main>
