@@ -22,28 +22,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"erenjaeger-01.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","width":300,"display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="关于本人  北航在读研究生 研究方向是导航、制导与控制，软硬件都会一些 兴趣爱好：绘画、pcb设计、飞机、Coding  关于本站 性质  本网站为个人博客网站，用于记录日常学习中的一些笔记、心得等。 ### 版权 网站文章除声明转载外均为本人原创，转载的文章将会在文末给出相关链接。 本站的文章可以被任意转载和继续创作等，但希望在转载本站文章时给出原文链接。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="https://erenjaeger-01.github.io/about/index.html">
+    <meta name="description" content="计算机是如何分辨不同尺度下的同一幅图像的呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机视觉系列（一）：图像金字塔">
+<meta property="og:url" content="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/index.html">
 <meta property="og:site_name" content="KxZhang&#39;s Blog">
-<meta property="og:description" content="关于本人  北航在读研究生 研究方向是导航、制导与控制，软硬件都会一些 兴趣爱好：绘画、pcb设计、飞机、Coding  关于本站 性质  本网站为个人博客网站，用于记录日常学习中的一些笔记、心得等。 ### 版权 网站文章除声明转载外均为本人原创，转载的文章将会在文末给出相关链接。 本站的文章可以被任意转载和继续创作等，但希望在转载本站文章时给出原文链接。">
+<meta property="og:description" content="计算机是如何分辨不同尺度下的同一幅图像的呢？">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-05-04T01:02:18.000Z">
-<meta property="article:modified_time" content="2022-05-04T01:03:26.087Z">
+<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/1.jpg">
+<meta property="article:published_time" content="2022-05-01T10:11:28.000Z">
+<meta property="article:modified_time" content="2022-05-01T13:23:56.071Z">
 <meta property="article:author" content="张凯翔">
+<meta property="article:tag" content="Computer Version">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/1.jpg">
 
 
-<link rel="canonical" href="https://erenjaeger-01.github.io/about/">
+<link rel="canonical" href="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"https://erenjaeger-01.github.io/about/index.html","path":"about/index.html","title":"关于"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/","path":"2022/05/01/计算机视觉系列（一）：图像金字塔/","title":"计算机视觉系列（一）：图像金字塔"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>关于 | KxZhang's Blog
-</title>
+<title>计算机视觉系列（一）：图像金字塔 | KxZhang's Blog</title>
   
 
 
@@ -146,7 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E4%BA%BA"><span class="nav-number">1.</span> <span class="nav-text">关于本人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99"><span class="nav-number">2.</span> <span class="nav-text">关于本站</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">2.1.</span> <span class="nav-text">性质</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94"><span class="nav-number">1.</span> <span class="nav-text">图像金字塔</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -209,47 +211,116 @@
 </noscript>
 
 
-    <div class="main-inner page posts-expand">
+    <div class="main-inner post posts-expand">
 
 
-    
-    
-    
-    <div class="post-block" lang="zh-CN"><header class="post-header">
+  
 
-<h1 class="post-title" itemprop="name headline">关于
-</h1>
 
-<div class="post-meta-container">
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://erenjaeger-01.github.io/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/author.png">
+      <meta itemprop="name" content="张凯翔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KxZhang's Blog">
+      <meta itemprop="description" content="博学慎思，参天尽物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="计算机视觉系列（一）：图像金字塔 | KxZhang's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机视觉系列（一）：图像金字塔
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-05-01 18:11:28 / 修改时间：21:23:56" itemprop="dateCreated datePublished" datetime="2022-05-01T18:11:28+08:00">2022-05-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Computer-Version/" itemprop="url" rel="index"><span itemprop="name">Computer Version</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
 </div>
 
-</header>
+        </div>
+      </header>
 
-      
-      
-      <div class="post-body">
-          <h2 id="关于本人">关于本人</h2>
-<ul>
-<li>北航在读研究生</li>
-<li>研究方向是导航、制导与控制，软硬件都会一些</li>
-<li>兴趣爱好：绘画、pcb设计、飞机、Coding</li>
-</ul>
-<h2 id="关于本站">关于本站</h2>
-<h3 id="性质">性质</h3>
-<ul>
-<li>本网站为个人博客网站，用于记录日常学习中的一些笔记、心得等。 ### 版权</li>
-<li>网站文章除声明转载外均为本人原创，转载的文章将会在文末给出相关链接。</li>
-<li>本站的文章可以被任意转载和继续创作等，但希望在转载本站文章时给出原文链接。</li>
-</ul>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="图像金字塔">图像金字塔</h2>
+<p>一幅图像的金字塔是一系列以金字塔形状排列，分辨率逐渐降低且源于同一张原始图的图像集合。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。层级越高，图像越小，分辨率越低。图像金字塔是图像中多尺度表达的一种，最初用于机器视觉和图像压缩，最主要功能用于图像分割，是一种以多分辨率来解释图像的有效但概念简单的结构。</p>
+<figure>
+<img src="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/1.jpg" alt="pyramid"><figcaption aria-hidden="true">pyramid</figcaption>
+</figure>
+<p>生成图像金字塔主要有两种方式： <strong>向下采样</strong>和<strong>向上采样</strong>。 * 向下采样：将图像从最底层（即上图中的level0）转换为level1、level2...的过程，图像分辨率不断降低。 * 向上采样：将图像从最顶层（即上图中的level4）转换为level3、level2...的过程，图像分辨率不断增大。</p>
+<p>常见的金字塔一般有两类： * <strong>高斯金字塔</strong>: 用来向下/降采样，主要的图像金字塔； * <strong>拉普拉斯金字塔</strong>: 用来从金字塔低层图像重建上层未采样图像，在数字图像处理中也即是预测残差，可以对图像进行最大程度的还原，配合高斯金字塔一起使用。</p>
+<p>在OpenCv中提供了对图像进行上下采样的接口：<strong>pyrUp()</strong>和<strong>pyrDown()</strong>，同时提供了一个对图像进行尺度变换的函数<strong>resize()</strong>。</p>
+<p>获取金字塔一般来说包括两个步骤： * 对于向下采样，首先对图像进行高斯平滑，然后进行降采样（将图像尺寸行和列方向缩减一半）； * 对于向上采样，首先对图像进行升采样（将图像尺寸行和列方向增大一倍），然后进行高斯平滑；</p>
+<p>要吃饭了，有空再写</p>
 
-      </div>
-      
-      
-      
     </div>
 
     
     
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Computer-Version/" rel="tag"># Computer Version</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/" rel="prev" title="计算机视觉系列（二）：图像梯度">
+                  <i class="fa fa-chevron-left"></i> 计算机视觉系列（二）：图像梯度
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
 
 
 </div>
