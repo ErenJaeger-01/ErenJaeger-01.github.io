@@ -2880,7 +2880,7 @@ body {
   background: rgba(255,255,255,0.8) none repeat scroll !important;
 }
 .popup {
-  opacity: 1;
+  opacity: 0.9;
 }
 .comments {
   background: rgba(255,255,255,0.8);
