@@ -31,15 +31,15 @@
 <meta property="og:site_name" content="KxZhang&#39;s Blog">
 <meta property="og:description" content="像素也分三六九等。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/fast_speedtest.jpg">
-<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/distorted.png">
-<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/OpenCV提取的特征点.jpg">
+<meta property="og:image" content="https://erenjaeger-01.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/fast_speedtest.jpg">
+<meta property="og:image" content="https://erenjaeger-01.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/distorted.png">
+<meta property="og:image" content="https://erenjaeger-01.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/OpenCV%E6%8F%90%E5%8F%96%E7%9A%84%E7%89%B9%E5%BE%81%E7%82%B9.jpg">
 <meta property="article:published_time" content="2022-05-05T11:17:47.000Z">
-<meta property="article:modified_time" content="2022-05-05T11:26:56.122Z">
+<meta property="article:modified_time" content="2022-05-05T11:40:59.998Z">
 <meta property="article:author" content="张凯翔">
 <meta property="article:tag" content="Computer Version">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://erenjaeger-01.github.io/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/fast_speedtest.jpg">
+<meta name="twitter:image" content="https://erenjaeger-01.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/fast_speedtest.jpg">
 
 
 <link rel="canonical" href="https://erenjaeger-01.github.io/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/">
@@ -152,7 +152,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E7%89%B9%E5%BE%81%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">图像的特征点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#orb%E7%89%B9%E5%BE%81%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">ORB特征点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BE%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="nav-number">3.</span> <span class="nav-text">举个例子</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E7%89%B9%E5%BE%81%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">图像的特征点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ORB%E7%89%B9%E5%BE%81%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">ORB特征点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BE%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="nav-number">3.</span> <span class="nav-text">举个例子</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -278,7 +278,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2022-05-05 19:17:47 / 修改时间：19:26:56" itemprop="dateCreated datePublished" datetime="2022-05-05T19:17:47+08:00">2022-05-05</time>
+      <time title="创建时间：2022-05-05 19:17:47 / 修改时间：19:40:59" itemprop="dateCreated datePublished" datetime="2022-05-05T19:17:47+08:00">2022-05-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -307,32 +307,24 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="图像的特征点">图像的特征点</h2>
-<p>图像的特征点可以理解为图像中比较有代表性的点，这些点在相机视角发生少量变化后会保持不变，于是我们就可以在各个图像中找到相同的点。在SLAM的视觉里程计中，我们需要通过一帧帧连续拍摄的图像来对相机的运动进行估计，因此需要对每一帧图像中提取出特征点，通过这些点对相机的位姿估计进行讨论。</p>
-<h2 id="orb特征点">ORB特征点</h2>
-<p><strong>ORB特征点（Oriented FAST and Rotated BRIEF）</strong>是对<strong>FAST关键点</strong>和<strong>BRIEF特征描述子</strong>的一种结合与改进。</p>
+        <h2 id="图像的特征点"><a href="#图像的特征点" class="headerlink" title="图像的特征点"></a>图像的特征点</h2><p>图像的特征点可以理解为图像中比较有代表性的点，这些点在相机视角发生少量变化后会保持不变，于是我们就可以在各个图像中找到相同的点。在SLAM的视觉里程计中，我们需要通过一帧帧连续拍摄的图像来对相机的运动进行估计，因此需要对每一帧图像中提取出特征点，通过这些点对相机的位姿估计进行讨论。</p>
+<h2 id="ORB特征点"><a href="#ORB特征点" class="headerlink" title="ORB特征点"></a>ORB特征点</h2><p><strong>ORB特征点（Oriented FAST and Rotated BRIEF）</strong>是对<strong>FAST关键点</strong>和<strong>BRIEF特征描述子</strong>的一种结合与改进。</p>
 <ul>
 <li>FAST关键点是一种角点，主要检测局部像素区域灰度变化明显的地方，因为只检测亮度，所以速度非常快；</li>
 <li>BRIEF是一种二进制描述子，在提取完关键点后，对每个关键点计算描述子，用来描述关键点周围像素的信息，描述子的设计原则是“ <strong>外观相似的特征应该具有相似的描述子</strong>”。</li>
 </ul>
-<figure>
-<img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/fast_speedtest.jpg" alt="FAST关键点"><figcaption aria-hidden="true">FAST关键点</figcaption>
-</figure>
+<p><img src="/./%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/fast_speedtest.jpg" alt="FAST关键点"></p>
 <p>虽然FAST关键点速度非常快，但是快有快的缺陷。首先，FAST关键点没有方向信息，因此当图像发生旋转之后，关键点对应的描述子会发生变化；此外，FAST关键点不具有尺度不变性，也就是说不同距离对着同一个物体拍照，远处看起来像关键点的地方，距离近了就可能不是关键点了。对于这两个问题，ORB特征点采用了如下方法进行解决。</p>
 <ul>
 <li>对于尺度问题，构建 <a target="_blank" rel="noopener" href="https://kxzhang.cn/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/#more">图像金字塔</a>,得到不同尺度下的不同分辨率图像，对于每一层图像提取特征点，最后再匹配到原图像，这样就实现了关键点的尺度不变性；</li>
 <li>对于旋转问题，ORB特征点采用了灰度质心法计算特征点的方向，通过特征点的方向实现关键点的旋转不变性。</li>
 </ul>
-<h2 id="举个例子">举个例子</h2>
-<p>OpenCV提取图像特征点</p>
+<h2 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h2><p>OpenCV提取图像特征点</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;opencv2/opencv.hpp&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;chrono&gt;</span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">#define EDGE_THRESHOLD 19</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    std::vector&lt;cv::KeyPoint&gt; keypoints;</span><br><span class="line">    Mat descriptors;</span><br><span class="line">    cv::Ptr&lt;cv::FeatureDetector&gt; detector = cv::ORB::create();</span><br><span class="line">    cv::Ptr&lt;cv::DescriptorExtractor&gt; descriptor = cv::ORB::create();</span><br><span class="line"></span><br><span class="line">    Mat image = imread(&quot;../distorted.png&quot;, IMREAD_COLOR);</span><br><span class="line">    //-- 第一步:检测 Oriented FAST 角点位置</span><br><span class="line">    detector-&gt;detect(image, keypoints);</span><br><span class="line"></span><br><span class="line">    //-- 第二步:根据角点位置计算 BRIEF 描述子</span><br><span class="line">    descriptor-&gt;compute(image, keypoints, descriptors);</span><br><span class="line"></span><br><span class="line">    Mat outimg;</span><br><span class="line">    drawKeypoints(image, keypoints, outimg, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);</span><br><span class="line">    imshow(&quot;原图&quot;, image);</span><br><span class="line">    imshow(&quot;OpenCV函数提取的ORB特征点&quot;, outimg);</span><br><span class="line">    imwrite(&quot;OpenCV提取的ORB特征点.jpg&quot;, outimg);</span><br><span class="line">    waitKey(0);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>运行结果：</p>
-<figure>
-<img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/distorted.png" alt="原图"><figcaption aria-hidden="true">原图</figcaption>
-</figure>
-<figure>
-<img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/OpenCV提取的特征点.jpg" alt="OpenCV提取的特征点"><figcaption aria-hidden="true">OpenCV提取的特征点</figcaption>
-</figure>
+<p><img src="/./%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/distorted.png" alt="原图"></p>
+<p><img src="/./%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/OpenCV%E6%8F%90%E5%8F%96%E7%9A%84%E7%89%B9%E5%BE%81%E7%82%B9.jpg" alt="OpenCV提取的特征点"></p>
 
     </div>
 
