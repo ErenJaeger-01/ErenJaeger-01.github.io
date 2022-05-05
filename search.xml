@@ -23,38 +23,6 @@
       </tags>
   </entry>
   <entry>
-    <title>计算机视觉系列（一）：图像金字塔</title>
-    <url>/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/</url>
-    <content><![CDATA[<h2 id="图像金字塔">图像金字塔</h2>
-<p>一幅图像的金字塔是一系列以金字塔形状排列，分辨率逐渐降低且源于同一张原始图的图像集合。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。层级越高，图像越小，分辨率越低。图像金字塔是图像中多尺度表达的一种，最初用于机器视觉和图像压缩，最主要功能用于图像分割，是一种以多分辨率来解释图像的有效但概念简单的结构。</p>
-<figure>
-<img src="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/1.jpg" alt="pyramid"><figcaption aria-hidden="true">pyramid</figcaption>
-</figure>
-<p>生成图像金字塔主要有两种方式： <strong>向下采样</strong>和<strong>向上采样</strong>。</p>
-<ul>
-<li>向下采样：将图像从最底层（即上图中的level0）转换为level1、level2...的过程，图像分辨率不断降低。</li>
-<li>向上采样：将图像从最顶层（即上图中的level4）转换为level3、level2...的过程，图像分辨率不断增大。</li>
-</ul>
-<p>常见的金字塔一般有两类：</p>
-<ul>
-<li><strong>高斯金字塔</strong>: 用来向下/降采样，主要的图像金字塔；</li>
-<li><strong>拉普拉斯金字塔</strong>: 用来从金字塔低层图像重建上层未采样图像，在数字图像处理中也即是预测残差，可以对图像进行最大程度的还原，配合高斯金字塔一起使用。</li>
-</ul>
-<p>在OpenCv中提供了对图像进行上下采样的接口：<strong>pyrUp()</strong>和<strong>pyrDown()</strong>，同时提供了一个对图像进行尺度变换的函数<strong>resize()</strong>。</p>
-<p>获取金字塔一般来说包括两个步骤：</p>
-<ul>
-<li>对于向下采样，首先对图像进行高斯平滑，然后进行降采样（将图像尺寸行和列方向缩减一半）；</li>
-<li>对于向上采样，首先对图像进行升采样（将图像尺寸行和列方向增大一倍），然后进行高斯平滑；</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Computer Version</category>
-      </categories>
-      <tags>
-        <tag>Computer Version</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>五一假期产生的一些感想</title>
     <url>/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/</url>
     <content><![CDATA[<p>北京的疫情又严重起来了，五一假期全都在实验室里坐着，每天除了不上课和平时基本没什么区别。最近在学习SLAM，想把学习过程中的一些想法记录下来，又不想拘泥于以前的做法，于是搭建了这个博客网站。不得不说框架真的是很方便，对于我这种对前端一无所知的人来说也能很快的搭好一个看上去还不错（个人感觉）的网站。</p>
@@ -101,6 +69,38 @@
       <categories>
         <category>杂记</category>
       </categories>
+  </entry>
+  <entry>
+    <title>计算机视觉系列（一）：图像金字塔</title>
+    <url>/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/</url>
+    <content><![CDATA[<h2 id="图像金字塔">图像金字塔</h2>
+<p>一幅图像的金字塔是一系列以金字塔形状排列，分辨率逐渐降低且源于同一张原始图的图像集合。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。层级越高，图像越小，分辨率越低。图像金字塔是图像中多尺度表达的一种，最初用于机器视觉和图像压缩，最主要功能用于图像分割，是一种以多分辨率来解释图像的有效但概念简单的结构。</p>
+<figure>
+<img src="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/1.jpg" alt="pyramid"><figcaption aria-hidden="true">pyramid</figcaption>
+</figure>
+<p>生成图像金字塔主要有两种方式： <strong>向下采样</strong>和<strong>向上采样</strong>。</p>
+<ul>
+<li>向下采样：将图像从最底层（即上图中的level0）转换为level1、level2...的过程，图像分辨率不断降低。</li>
+<li>向上采样：将图像从最顶层（即上图中的level4）转换为level3、level2...的过程，图像分辨率不断增大。</li>
+</ul>
+<p>常见的金字塔一般有两类：</p>
+<ul>
+<li><strong>高斯金字塔</strong>: 用来向下/降采样，主要的图像金字塔；</li>
+<li><strong>拉普拉斯金字塔</strong>: 用来从金字塔低层图像重建上层未采样图像，在数字图像处理中也即是预测残差，可以对图像进行最大程度的还原，配合高斯金字塔一起使用。</li>
+</ul>
+<p>在OpenCv中提供了对图像进行上下采样的接口：<strong>pyrUp()</strong>和<strong>pyrDown()</strong>，同时提供了一个对图像进行尺度变换的函数<strong>resize()</strong>。</p>
+<p>获取金字塔一般来说包括两个步骤：</p>
+<ul>
+<li>对于向下采样，首先对图像进行高斯平滑，然后进行降采样（将图像尺寸行和列方向缩减一半）；</li>
+<li>对于向上采样，首先对图像进行升采样（将图像尺寸行和列方向增大一倍），然后进行高斯平滑；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Computer Version</category>
+      </categories>
+      <tags>
+        <tag>Computer Version</tag>
+      </tags>
   </entry>
   <entry>
     <title>计算机视觉系列（二）：图像梯度</title>
