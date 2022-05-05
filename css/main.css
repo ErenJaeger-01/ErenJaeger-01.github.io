@@ -2868,14 +2868,14 @@ mjx-container[display='true'] + br {
   justify-content: center;
 }
 .links-of-author-item {
-  margin: 5px 0 0;
+  margin: 7px 0 0;
 }
 .links-of-author-item a {
   box-sizing: border-box;
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
-  padding: 0 5px;
+  padding: 0 7px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -2980,11 +2980,16 @@ mjx-container[display='true'] + br {
   }
 }
 body {
-  background: url("/images/background1.jpg");
+  background: url("/images/background.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
   background-position: 50% 50%;
+}
+.site-brand-container {
+  background-image: url("/images/brand.jpg");
+  background-size: 100% 100%;
+  opacity: 0.9;
 }
 .post-block {
   background: rgba(255,255,255,0.9) none repeat scroll !important;
