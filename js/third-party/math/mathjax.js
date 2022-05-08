@@ -2,7 +2,7 @@
 
 document.addEventListener('page:loaded', () => {
   if (!CONFIG.enableMath) return;
-
+  
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       tex: {

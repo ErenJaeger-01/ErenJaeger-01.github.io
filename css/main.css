@@ -1377,7 +1377,7 @@ pre code {
 }
 .sidebar-inner {
   color: #999;
-  max-height: calc(100vh - 24px);
+  max-height: calc(100vh - 30px);
   padding: 18px 10px;
   text-align: center;
   display: flex;
@@ -1418,7 +1418,7 @@ pre code {
   margin-top: 0;
 }
 .links-of-author a {
-  font-size: 0.8125em;
+  font-size: 1em;
 }
 .sidebar .sidebar-button:not(:first-child) {
   margin-top: 15px;
@@ -2665,7 +2665,7 @@ mjx-container[display='true'] + br {
   background: var(--content-bg-color);
   border-radius: 10px 10px 10px 10px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
-  width: 300px;
+  width: 240px;
 }
 @media (max-width: 991px) {
   .header-inner {
@@ -2699,7 +2699,7 @@ mjx-container[display='true'] + br {
 .main-inner {
   border-radius: 10px 10px 10px 10px;
   box-sizing: border-box;
-  width: calc(100% - 312px);
+  width: calc(100% - 255px);
 }
 @media (max-width: 991px) {
   .main-inner {
@@ -2708,7 +2708,7 @@ mjx-container[display='true'] + br {
   }
 }
 .footer-inner {
-  padding-left: 312px;
+  padding-left: 255px;
 }
 @media (max-width: 991px) {
   .footer-inner {
@@ -2822,11 +2822,11 @@ mjx-container[display='true'] + br {
   border-bottom-color: #fc6423;
 }
 .sidebar {
-  margin-top: 12px;
+  margin-top: 15px;
   position: -webkit-sticky;
   position: sticky;
-  top: 12px;
-  width: 300px;
+  top: 15px;
+  width: 240px;
   visibility: hidden;
 }
 @media (max-width: 991px) {
@@ -2903,7 +2903,7 @@ mjx-container[display='true'] + br {
 .main-inner > .pagination:not(:first-child):not(.sub-menu) {
   border-radius: 10px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12), 0 -1px 0.5px 0 rgba(0,0,0,0.09);
-  margin-top: 12px;
+  margin-top: 15px;
 }
 @media (min-width: 768px) and (max-width: 991px) {
   .main-inner > .sub-menu:not(:first-child):not(.sub-menu),
@@ -2970,13 +2970,13 @@ mjx-container[display='true'] + br {
     padding: 8px;
   }
   .posts-expand .post-button {
-    margin: 12px 0;
+    margin: 15px 0;
   }
   .post-block {
-    padding: 12px;
+    padding: 15px;
   }
   .comments {
-    padding: 10px 12px;
+    padding: 10px 15px;
   }
 }
 body {
