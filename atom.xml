@@ -6,7 +6,7 @@
   <link href="https://erenjaeger-01.github.io/atom.xml" rel="self"/>
   
   <link href="https://erenjaeger-01.github.io/"/>
-  <updated>2022-05-05T11:42:46.616Z</updated>
+  <updated>2022-05-08T03:42:18.081Z</updated>
   <id>https://erenjaeger-01.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ORB-SLAM学习（二）：地图初始化</title>
+    <link href="https://erenjaeger-01.github.io/2022/05/08/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9C%B0%E5%9B%BE%E5%88%9D%E5%A7%8B%E5%8C%96/"/>
+    <id>https://erenjaeger-01.github.io/2022/05/08/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9C%B0%E5%9B%BE%E5%88%9D%E5%A7%8B%E5%8C%96/</id>
+    <published>2022-05-08T03:41:18.000Z</published>
+    <updated>2022-05-08T03:42:18.081Z</updated>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <summary type="html">&lt;center&gt;万里长征第二步&lt;/center&gt;</summary>
+    
+    
+    
+    <category term="SLAM" scheme="https://erenjaeger-01.github.io/categories/SLAM/"/>
+    
+    
+    <category term="SLAM" scheme="https://erenjaeger-01.github.io/tags/SLAM/"/>
+    
+  </entry>
   
   <entry>
     <title>计算机视觉系列（三）：ORB特征点</title>

@@ -225,4 +225,16 @@
         <tag>Computer Version</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ORB-SLAM学习（二）：地图初始化</title>
+    <url>/2022/05/08/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9C%B0%E5%9B%BE%E5%88%9D%E5%A7%8B%E5%8C%96/</url>
+    <content><![CDATA[
+]]></content>
+      <categories>
+        <category>SLAM</category>
+      </categories>
+      <tags>
+        <tag>SLAM</tag>
+      </tags>
+  </entry>
 </search>
