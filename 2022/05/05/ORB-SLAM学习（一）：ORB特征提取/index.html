@@ -308,24 +308,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="相关知识介绍">相关知识介绍</h2>
-<p><a target="_blank" rel="noopener" href="https://kxzhang.cn/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/#more">图像金字塔</a></p>
+        <h2 id="相关知识介绍"><a href="#相关知识介绍" class="headerlink" title="相关知识介绍"></a>相关知识介绍</h2><p><a target="_blank" rel="noopener" href="https://kxzhang.cn/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/#more">图像金字塔</a></p>
 <p><a target="_blank" rel="noopener" href="https://kxzhang.cn/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/">ORB特征点</a></p>
-<h2 id="绪论">绪论</h2>
-<p>ORB-SLAM2中的ORB特征点提取和OpenCV有所不同。在ORB-SLAM2中进行了一系列操作让特征点均匀的分布在图像中，这样对于后面的位姿估计比较好。OpenCV直接提取的特征点可能会出现扎堆，集中等现象，这样很多特征点就没用了。下面对ORB-SLAM2中的ORB特征点提取的过程进行介绍。</p>
-<h2 id="构建图像金字塔">构建图像金字塔</h2>
-<ul>
+<h2 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h2><p>ORB-SLAM2中的ORB特征点提取和OpenCV有所不同。在ORB-SLAM2中进行了一系列操作让特征点均匀的分布在图像中，这样对于后面的位姿估计比较好。OpenCV直接提取的特征点可能会出现扎堆，集中等现象，这样很多特征点就没用了。下面对ORB-SLAM2中的ORB特征点提取的过程进行介绍。</p>
+<h2 id="构建图像金字塔"><a href="#构建图像金字塔" class="headerlink" title="构建图像金字塔"></a>构建图像金字塔</h2><ul>
 <li><p>首先对图像进行扩展，这一步的目的是为了之后的高斯模糊操作。</p>
-<figure>
-<img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/图像扩展.png" alt="图像扩充示意，这一步是把原图像（最里边的矩形）扩展到最外侧的矩形"><figcaption aria-hidden="true">图像扩充示意，这一步是把原图像（最里边的矩形）扩展到最外侧的矩形</figcaption>
-</figure></li>
-<li><p>进行一个循环，把每一层的图像都在上一层图像的基础上进行扩充（或者叫补边），该过程用到了OpenCV中的<em>copyMakeBorder</em>函数和<em>resize</em>函数，扩充的规则为<em>BORDER_REFLECT_101</em>，扩充的效果如下：</p></li>
+<p><img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/图像扩展.png" alt="图像扩充示意，这一步是把原图像（最里边的矩形）扩展到最外侧的矩形"></p>
+</li>
+<li><p>进行一个循环，把每一层的图像都在上一层图像的基础上进行扩充（或者叫补边），该过程用到了OpenCV中的<em>copyMakeBorder</em>函数和<em>resize</em>函数，扩充的规则为<em>BORDER_REFLECT_101</em>，扩充的效果如下：</p>
+</li>
 </ul>
-<figure>
-<img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/图像扩充.png" alt="左边是扩充效果，可以看出是一个类似镜像的效果"><figcaption aria-hidden="true">左边是扩充效果，可以看出是一个类似镜像的效果</figcaption>
-</figure>
-<h2 id="计算特征点并通过四叉树对特征点进行均匀化操作">计算特征点并通过四叉树对特征点进行均匀化操作</h2>
-<p>这一步又对每一层进行了一次遍历，干了这些事：</p>
+<p><img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/图像扩充.png" alt="左边是扩充效果，可以看出是一个类似镜像的效果"></p>
+<h2 id="计算特征点并通过四叉树对特征点进行均匀化操作"><a href="#计算特征点并通过四叉树对特征点进行均匀化操作" class="headerlink" title="计算特征点并通过四叉树对特征点进行均匀化操作"></a>计算特征点并通过四叉树对特征点进行均匀化操作</h2><p>这一步又对每一层进行了一次遍历，干了这些事：</p>
 <ul>
 <li>把原图像的边扩充3个像素点，这个是为了进行FAST关键点提取预留的计算半径；</li>
 <li>把图像均匀划分成了一堆小格子（均匀化）；</li>
@@ -333,9 +327,7 @@
 <li>把采取到的关键点坐标进行转换，之前是在小方格中的坐标系，现在要通过一些偏移操作转换到原图像下的坐标系；</li>
 <li>调用<em>DistributeOctTree()</em>函数对特征点进行均匀化（ORB-SLAM的精髓之一），关于四叉树均匀化特征点可以通过下面一幅图来表示；</li>
 </ul>
-<figure>
-<img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/四叉树.png" alt="四叉树均匀化特征点"><figcaption aria-hidden="true">四叉树均匀化特征点</figcaption>
-</figure>
+<p><img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/四叉树.png" alt="四叉树均匀化特征点"></p>
 <ul>
 <li>再进行一次坐标转换，这次是把提取到的关键点坐标转换为金字塔划分那一步的扩展图像的坐标；</li>
 </ul>
@@ -343,18 +335,15 @@
 <ul>
 <li>计算特征点的方向信息，调用<em>IC_Angle()</em>函数，通过一些小操作提高了一些速度。</li>
 </ul>
-<h2 id="计算描述子并进行金字塔图像特征恢复">计算描述子并进行金字塔图像特征恢复</h2>
-<p>这一步一上来又对每层金字塔进行了一次遍历，然后把每层金字塔的特征点个数累加存到了一个变量里，之后根据这个变量设置了描述子矩阵的容量。</p>
+<h2 id="计算描述子并进行金字塔图像特征恢复"><a href="#计算描述子并进行金字塔图像特征恢复" class="headerlink" title="计算描述子并进行金字塔图像特征恢复"></a>计算描述子并进行金字塔图像特征恢复</h2><p>这一步一上来又对每层金字塔进行了一次遍历，然后把每层金字塔的特征点个数累加存到了一个变量里，之后根据这个变量设置了描述子矩阵的容量。</p>
 <p>再来一次遍历（已经麻了），这一步开始计算描述子</p>
 <ul>
 <li>首先对金字塔图像进行高斯模糊，因为BRIEF描述子对噪声敏感，所以要通过高斯模糊消除噪声对描述子的影响，这一步就是用到了之前的图像扩充。高斯模糊方法采用的OpenCV函数<em>GaussianBlur()</em>。</li>
 <li>然后对每个关键点计算描述子，首先要根据之前计算得到的方向对坐标进行旋转，坐标对其之后根据描述子模板进行描述子计算，保存到<em>descriptors</em>矩阵中；</li>
 <li>对于除第0层的图像（也就是最底下那一层），将所有的特征点乘相应层数的缩放因子，投射到最底层图像中，这样就实现了特征点的提取。</li>
 </ul>
-<h2 id="通过内参矩阵对特征点进行去畸变操作">通过内参矩阵对特征点进行去畸变操作</h2>
-<p>内参系数在yaml文件中都给写好了，直接调用OpenCV的库函数<em>undistortPoints()</em>进行特征点去畸变操作。</p>
-<h2 id="将特征点分配到网格中">将特征点分配到网格中</h2>
-<p>调用<em>AssignFeaturesToGrid()</em></p>
+<h2 id="通过内参矩阵对特征点进行去畸变操作"><a href="#通过内参矩阵对特征点进行去畸变操作" class="headerlink" title="通过内参矩阵对特征点进行去畸变操作"></a>通过内参矩阵对特征点进行去畸变操作</h2><p>内参系数在yaml文件中都给写好了，直接调用OpenCV的库函数<em>undistortPoints()</em>进行特征点去畸变操作。</p>
+<h2 id="将特征点分配到网格中"><a href="#将特征点分配到网格中" class="headerlink" title="将特征点分配到网格中"></a>将特征点分配到网格中</h2><p>调用<em>AssignFeaturesToGrid()</em> </p>
 
     </div>
 

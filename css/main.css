@@ -2936,6 +2936,9 @@ mjx-container[display='true'] + br {
 .site-brand-container {
   border-radius: 10px 10px 0 0;
 }
+.links-of-author a {
+  font-size: 1em;
+}
 .post-eof {
   display: none;
 }
