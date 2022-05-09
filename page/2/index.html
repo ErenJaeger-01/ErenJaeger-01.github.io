@@ -25,30 +25,25 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"erenjaeger-01.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":15},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":{"livere":{"text":"......","order":-1}},"activeClass":"livere"},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="OpenCV中用到的一些函数功能说明">
-<meta property="og:type" content="article">
-<meta property="og:title" content="OpenCV中用到的一些函数说明">
-<meta property="og:url" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/index.html">
+    <meta name="description" content="博学慎思，参天尽物">
+<meta property="og:type" content="website">
+<meta property="og:title" content="KxZhang&#39;s Blog">
+<meta property="og:url" content="https://erenjaeger-01.github.io/page/2/index.html">
 <meta property="og:site_name" content="KxZhang&#39;s Blog">
-<meta property="og:description" content="OpenCV中用到的一些函数功能说明">
+<meta property="og:description" content="博学慎思，参天尽物">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png">
-<meta property="article:published_time" content="2022-05-01T00:46:38.000Z">
-<meta property="article:modified_time" content="2022-05-05T11:42:49.944Z">
 <meta property="article:author" content="张凯翔">
-<meta property="article:tag" content="OpenCV">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png">
 
 
-<link rel="canonical" href="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/">
+<link rel="canonical" href="https://erenjaeger-01.github.io/page/2/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/","path":"2022/05/01/OpenCV中用到的一些函数说明/","title":"OpenCV中用到的一些函数说明"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/2/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>OpenCV中用到的一些函数说明 | KxZhang's Blog</title>
+<title>KxZhang's Blog</title>
   
 
 
@@ -78,7 +73,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">KxZhang's Blog</p>
+      <h1 class="site-title">KxZhang's Blog</h1>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Like a giddy planet beside a burning star.</p>
@@ -138,7 +133,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -151,7 +146,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E6%95%B4%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">取整函数</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -236,17 +230,320 @@
 </noscript>
 
 
-    <div class="main-inner post posts-expand">
-
+    <div class="main-inner index posts-expand">
 
   
+
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+
+.glyphicon-chevron-left:before{
+    content: "《"
+}
+.glyphicon-chevron-right:before{
+    content: "》"
+}
+
+@media (max-width: 767px){
+    .rights{
+        display: none;
+    }
+    .carousel{
+        width: 100% !important;
+        height: 100% !important;
+    }
+    .slide{
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+}
+
+.carousel{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.carousel-inner {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 0;
+}
+.carousel-inner > .item {
+  display: none;
+  position: relative;
+  -webkit-transition: 0.6s ease-in-out left;
+  -o-transition: 0.6s ease-in-out left;
+  transition: 0.6s ease-in-out left;
+}
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  line-height: 1;
+}
+@media all and (transform-3d), (-webkit-transform-3d) {
+  .carousel-inner > .item {
+    -webkit-transition: -webkit-transform 0.6s ease-in-out;
+    -moz-transition: -moz-transform 0.6s ease-in-out;
+    -o-transition: -o-transform 0.6s ease-in-out;
+    transition: transform 0.6s ease-in-out;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    -moz-perspective: 1000px;
+    perspective: 1000px;
+  }
+  .carousel-inner > .item.next,
+  .carousel-inner > .item.active.right {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    left: 0;
+  }
+  .carousel-inner > .item.prev,
+  .carousel-inner > .item.active.left {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+    left: 0;
+  }
+  .carousel-inner > .item.next.left,
+  .carousel-inner > .item.prev.right,
+  .carousel-inner > .item.active {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    left: 0;
+  }
+}
+.carousel-inner > .active,
+.carousel-inner > .next,
+.carousel-inner > .prev {
+  display: block;
+}
+.carousel-inner > .active {
+  left: 0;
+}
+.carousel-inner > .next,
+.carousel-inner > .prev {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.carousel-inner > .next {
+  left: 100%;
+}
+.carousel-inner > .prev {
+  left: -100%;
+}
+.carousel-inner > .next.left,
+.carousel-inner > .prev.right {
+  left: 0;
+}
+.carousel-inner > .active.left {
+  left: -100%;
+}
+.carousel-inner > .active.right {
+  left: 100%;
+}
+.carousel-control {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 15%;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  font-size: 20px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0);
+}
+.carousel-control.left {
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
+  background-repeat: repeat-x;
+  border-radius: 15px;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+}
+.carousel-control.right {
+  left: auto;
+  right: 0;
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-repeat: repeat-x;
+  border-radius: 15px;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
+}
+.carousel-control:hover,
+.carousel-control:focus {
+  outline: 0;
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+.carousel-control .icon-prev,
+.carousel-control .icon-next,
+.carousel-control .glyphicon-chevron-left,
+.carousel-control .glyphicon-chevron-right {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  z-index: 5;
+  display: inline-block;
+}
+.carousel-control .icon-prev,
+.carousel-control .glyphicon-chevron-left {
+  left: 50%;
+  margin-left: -10px;
+}
+.carousel-control .icon-next,
+.carousel-control .glyphicon-chevron-right {
+  right: 50%;
+  margin-right: -10px;
+}
+.carousel-control .icon-prev,
+.carousel-control .icon-next {
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+  font-family: serif;
+}
+.carousel-control .icon-prev:before {
+  content: '\2039';
+}
+.carousel-control .icon-next:before {
+  content: '\203a';
+}
+.carousel-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  z-index: 15;
+  width: 60%;
+  margin-left: -30%;
+  padding-left: 0;
+  list-style: none;
+  text-align: center;
+}
+.carousel-indicators li {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 1px;
+  text-indent: -999px;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #000 \9;
+  background-color: rgba(0, 0, 0, 0);
+}
+.carousel-indicators .active {
+  margin: 0;
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+}
+.carousel-caption {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 20px;
+  z-index: 10;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.carousel-caption .btn {
+  text-shadow: none;
+}
+@media screen and (min-width: 768px) {
+  .carousel-control .glyphicon-chevron-left,
+  .carousel-control .glyphicon-chevron-right,
+  .carousel-control .icon-prev,
+  .carousel-control .icon-next {
+    width: 30px;
+    height: 30px;
+    margin-top: -10px;
+    font-size: 30px;
+  }
+  .carousel-control .glyphicon-chevron-left,
+  .carousel-control .icon-prev {
+    margin-left: -10px;
+  }
+  .carousel-control .glyphicon-chevron-right,
+  .carousel-control .icon-next {
+    margin-right: -10px;
+  }
+  .carousel-caption {
+    left: 20%;
+    right: 20%;
+    padding-bottom: 30px;
+  }
+  .carousel-indicators {
+    bottom: 20px;
+  }
+}
+</style>
+<div class="my-carousel" width="100%" height="320px" style="border: 0px; overflow: hidden; border-radius: 10px;" scrolling="no">
+
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="10000" >
+        <!-- 轮播（Carousel）指标 -->
+        <!-- <ol class="carousel-indicators"> -->
+        <!--  -->
+        <!--  -->
+
+            <!-- <li data-target="#myCarousel" data-slide-to="0"></li> -->
+            <!--   -->
+
+        <!--  -->
+        <!-- </ol> -->
+        <!-- 轮播（Carousel）项目 -->
+        <div class="carousel-inner" style="height: 100%; border-radius: 10px; width: 100%;">
+
+        
+         
+
+            
+                <div class="item active carousel-inner-img" href="/%20" target="_blank" style="height: 100%;">
+                    <img src="/images/header.jpg"   style="width: 100%; height: 100%" >
+                </div>
+                
+                
+
+        
+
+
+        </div>
+        <!-- 轮播（Carousel）导航 -->
+        <!-- <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"> -->
+            <!-- <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> -->
+
+        <!-- </a> -->
+        <!-- <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"> -->
+            <!-- <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> -->
+
+        <!-- </a> -->
+    </div>
+
+</div>
+
+
+    
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -260,13 +557,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="OpenCV中用到的一些函数说明 | KxZhang's Blog">
+      <meta itemprop="name" content="undefined | KxZhang's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          OpenCV中用到的一些函数说明
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/" class="post-title-link" itemprop="url">OpenCV中用到的一些函数说明</a>
+        </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -296,13 +593,6 @@
     </span>
 
   
-    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span id="busuanzi_value_page_pv"></span>
-    </span>
 </div>
 
         </div>
@@ -312,15 +602,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="取整函数"><a href="#取整函数" class="headerlink" title="取整函数"></a>取整函数</h2><p>cvRound()、cvFloor()、cvCeil()函数</p>
-<ul>
-<li>cvRound(): 返回参数最接近的整数值，四舍五入；</li>
-<li>cvFloor(): 返回不大于参数的最大整数值，即向下取整；</li>
-<li>cvCeil(): 返回不小于参数的最小整数值，即向上取整；</li>
-</ul>
-<p>示例：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;opencv2/opencv.hpp&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    waitKey(0);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>运行结果如下</p>
-<p><img src="/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png" alt="opencv"></p>
-
+          <center>OpenCV中用到的一些函数功能说明</center>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
     </div>
 
     
@@ -328,21 +619,8 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/OpenCV/" rel="tag"># OpenCV</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-            </div>
-            <div class="post-nav-item">
-                <a href="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/" rel="next" title="计算机视觉系列（二）：图像梯度">
-                  计算机视觉系列（二）：图像梯度 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
+        <div class="post-eof"></div>
+      
     </footer>
   </article>
 </div>
@@ -350,9 +628,10 @@
 
 
 
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
-
-    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81NjMxNS8zMjc3OA=="></div>
 </div>
   </main>
 

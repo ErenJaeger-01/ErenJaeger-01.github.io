@@ -25,30 +25,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"erenjaeger-01.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":15},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":{"livere":{"text":"......","order":-1}},"activeClass":"livere"},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="OpenCV中用到的一些函数功能说明">
+    <meta name="description" content="这章比较懒">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OpenCV中用到的一些函数说明">
-<meta property="og:url" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/index.html">
+<meta property="og:title" content="数学基础（一）：奇异值分解">
+<meta property="og:url" content="https://erenjaeger-01.github.io/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/index.html">
 <meta property="og:site_name" content="KxZhang&#39;s Blog">
-<meta property="og:description" content="OpenCV中用到的一些函数功能说明">
+<meta property="og:description" content="这章比较懒">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png">
-<meta property="article:published_time" content="2022-05-01T00:46:38.000Z">
-<meta property="article:modified_time" content="2022-05-05T11:42:49.944Z">
+<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/奇异值分解.png">
+<meta property="article:published_time" content="2022-05-09T13:13:49.000Z">
+<meta property="article:modified_time" content="2022-05-09T13:14:45.959Z">
 <meta property="article:author" content="张凯翔">
-<meta property="article:tag" content="OpenCV">
+<meta property="article:tag" content="Math">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png">
+<meta name="twitter:image" content="https://erenjaeger-01.github.io/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/奇异值分解.png">
 
 
-<link rel="canonical" href="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/">
+<link rel="canonical" href="https://erenjaeger-01.github.io/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/","path":"2022/05/01/OpenCV中用到的一些函数说明/","title":"OpenCV中用到的一些函数说明"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://erenjaeger-01.github.io/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/","path":"2022/05/09/数学基础（一）：奇异值分解/","title":"数学基础（一）：奇异值分解"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>OpenCV中用到的一些函数说明 | KxZhang's Blog</title>
+<title>数学基础（一）：奇异值分解 | KxZhang's Blog</title>
   
 
 
@@ -151,7 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E6%95%B4%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">取整函数</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3svd"><span class="nav-number">1.</span> <span class="nav-text">奇异值分解SVD</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -247,7 +247,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/">
+    <link itemprop="mainEntityOfPage" href="https://erenjaeger-01.github.io/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/assets/author.png">
@@ -260,12 +260,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="OpenCV中用到的一些函数说明 | KxZhang's Blog">
+      <meta itemprop="name" content="数学基础（一）：奇异值分解 | KxZhang's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          OpenCV中用到的一些函数说明
+          数学基础（一）：奇异值分解
         </h1>
 
         <div class="post-meta-container">
@@ -275,15 +275,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2022-05-01 08:46:38" itemprop="dateCreated datePublished" datetime="2022-05-01T08:46:38+08:00">2022-05-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-05-05 19:42:49" itemprop="dateModified" datetime="2022-05-05T19:42:49+08:00">2022-05-05</time>
+      <time title="创建时间：2022-05-09 21:13:49 / 修改时间：21:14:45" itemprop="dateCreated datePublished" datetime="2022-05-09T21:13:49+08:00">2022-05-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -291,7 +285,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/OpenCV/" itemprop="url" rel="index"><span itemprop="name">OpenCV</span></a>
+          <a href="/categories/Math/" itemprop="url" rel="index"><span itemprop="name">Math</span></a>
         </span>
     </span>
 
@@ -312,14 +306,45 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="取整函数"><a href="#取整函数" class="headerlink" title="取整函数"></a>取整函数</h2><p>cvRound()、cvFloor()、cvCeil()函数</p>
+        <h3 id="奇异值分解svd">奇异值分解SVD</h3>
+<p>SVD分解定义</p>
+<p><span class="math display">\[
+   A=U\sum{}V^T
+\]</span></p>
+<p>其中，A是<span class="math inline">\(m\times n\)</span>的矩阵，根据奇异值分解后，U是<span class="math inline">\(m\times m\)</span>的矩阵，<span class="math inline">\(\sum{}\)</span>是一个<span class="math inline">\(m\times n\)</span>的矩阵，除主对角线上的元素以外全部为0，主对角线上的每个元素都称为奇异值，V是一个<span class="math inline">\(n\times n\)</span>的矩阵，U和V都是酉矩阵，即满足</p>
+<p><span class="math display">\[
+U^TU=I,V^TV=I
+\]</span></p>
+<p>可以用下图表示奇异值分解：</p>
+<figure>
+<img src="/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/奇异值分解.png" alt="奇异值分解"><figcaption aria-hidden="true">奇异值分解</figcaption>
+</figure>
+<p>对于奇异值,它跟我们特征分解中的特征值类似，在奇异值矩阵中也是按照从大到小排列，而且奇异值的减少特别的快，在很多情况下，前10%甚至1%的奇异值的和就占了全部的奇异值之和的99%以上的比例。 也就是说，我们也可以用最大的k个的奇异值和对应的左右奇异向量来近似描述矩阵。也就是说：</p>
+<p><span class="math display">\[
+   A_{m\times n}=U_{m\times n}\sum{}_{m\times n}V^T_{n\times n}\approx U_{m\times k}\sum{}_{k\times k}V^T_{k\times n}
+\]</span></p>
+<p>其中k比n小很多，也就是一个大矩阵A可以用三个小矩阵<span class="math inline">\(U_{m\times k},\sum{}_{k\times k},V^T_{k\times n}\)</span>来表示。</p>
+<p>SVD求解最小二乘问题：</p>
+<p><span class="math display">\[
+   min\begin{Vmatrix}
+      Ax-b
+   \end{Vmatrix}^2,A\in R^{m\times n},x\in R^{n},b\in R^{m}
+\]</span></p>
+<p>m个方程求n个未知数，有三种情况：</p>
 <ul>
-<li>cvRound(): 返回参数最接近的整数值，四舍五入；</li>
-<li>cvFloor(): 返回不大于参数的最大整数值，即向下取整；</li>
-<li>cvCeil(): 返回不小于参数的最小整数值，即向上取整；</li>
+<li><span class="math inline">\(m=n\)</span>且A非奇异，则有唯一解（线性代数学到的）</li>
+<li><span class="math inline">\(m&gt;n\)</span>，约束的个数超过未知数个数，称为超定问题</li>
+<li><span class="math inline">\(m&lt;n\)</span>，约束的个数小于未知数个数，称为负定/欠定问题</li>
 </ul>
-<p>示例：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;opencv2/opencv.hpp&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    waitKey(0);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>运行结果如下</p>
-<p><img src="/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png" alt="opencv"></p>
+<p>通常我们遇到的都是超定问题，此时是没有解的，从而转向最小二乘问题：</p>
+<p><span class="math display">\[
+   J(x)=min\begin{Vmatrix}
+      Ax-b
+   \end{Vmatrix}^2
+\]</span></p>
+<p>懒得敲公式了。上个链接 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/436753966">奇异值分解与最小二乘法</a></p>
+<p>总结一下结论，对于<span class="math inline">\(Ax=0\)</span></p>
+<p>SVD分解之后得到的V最右侧的列向量(也就是<span class="math inline">\(V^T最下方的行向量\)</span>)就是一般性齐次线性方程组<span class="math inline">\(Ax=0\)</span>的解。</p>
 
     </div>
 
@@ -329,17 +354,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/OpenCV/" rel="tag"># OpenCV</a>
+              <a href="/tags/Math/" rel="tag"># Math</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/" rel="prev" title="计算机视觉系列（五）：基础矩阵和本质矩阵">
+                  <i class="fa fa-chevron-left"></i> 计算机视觉系列（五）：基础矩阵和本质矩阵
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/" rel="next" title="计算机视觉系列（二）：图像梯度">
-                  计算机视觉系列（二）：图像梯度 <i class="fa fa-chevron-right"></i>
+                <a href="/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%8D%A1%E6%96%B9%E6%A3%80%E9%AA%8C/" rel="next" title="数学基础（二）：卡方检验">
+                  数学基础（二）：卡方检验 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

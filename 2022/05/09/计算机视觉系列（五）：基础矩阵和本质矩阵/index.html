@@ -25,30 +25,32 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"erenjaeger-01.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":15},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":{"livere":{"text":"......","order":-1}},"activeClass":"livere"},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="OpenCV中用到的一些函数功能说明">
+    <meta name="description" content="并没有看上去那么基础">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OpenCV中用到的一些函数说明">
-<meta property="og:url" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/index.html">
+<meta property="og:title" content="计算机视觉系列（五）：基础矩阵和本质矩阵">
+<meta property="og:url" content="https://erenjaeger-01.github.io/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/index.html">
 <meta property="og:site_name" content="KxZhang&#39;s Blog">
-<meta property="og:description" content="OpenCV中用到的一些函数功能说明">
+<meta property="og:description" content="并没有看上去那么基础">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png">
-<meta property="article:published_time" content="2022-05-01T00:46:38.000Z">
-<meta property="article:modified_time" content="2022-05-05T11:42:49.944Z">
+<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/对极几何示意图.png">
+<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/本质矩阵分解1.jpg">
+<meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/归一化.png">
+<meta property="article:published_time" content="2022-05-09T13:11:10.000Z">
+<meta property="article:modified_time" content="2022-05-09T13:13:08.761Z">
 <meta property="article:author" content="张凯翔">
-<meta property="article:tag" content="OpenCV">
+<meta property="article:tag" content="Computer Version">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png">
+<meta name="twitter:image" content="https://erenjaeger-01.github.io/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/对极几何示意图.png">
 
 
-<link rel="canonical" href="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/">
+<link rel="canonical" href="https://erenjaeger-01.github.io/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/","path":"2022/05/01/OpenCV中用到的一些函数说明/","title":"OpenCV中用到的一些函数说明"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://erenjaeger-01.github.io/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/","path":"2022/05/09/计算机视觉系列（五）：基础矩阵和本质矩阵/","title":"计算机视觉系列（五）：基础矩阵和本质矩阵"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>OpenCV中用到的一些函数说明 | KxZhang's Blog</title>
+<title>计算机视觉系列（五）：基础矩阵和本质矩阵 | KxZhang's Blog</title>
   
 
 
@@ -151,7 +153,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E6%95%B4%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">取整函数</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%9E%81%E5%87%A0%E4%BD%95"><span class="nav-number">1.</span> <span class="nav-text">对极几何</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5"><span class="nav-number">2.</span> <span class="nav-text">基础矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5"><span class="nav-number">3.</span> <span class="nav-text">本质矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E6%B5%8B%E9%87%8F%E4%B8%89%E8%A7%92%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">三角测量（三角化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%84%E5%90%91%E5%90%8C%E6%80%A7%E5%BD%92%E4%B8%80%E5%8C%96%E5%85%AB%E7%82%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">各向同性归一化（八点法）</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -247,7 +249,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://erenjaeger-01.github.io/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/">
+    <link itemprop="mainEntityOfPage" href="https://erenjaeger-01.github.io/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/assets/author.png">
@@ -260,12 +262,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="OpenCV中用到的一些函数说明 | KxZhang's Blog">
+      <meta itemprop="name" content="计算机视觉系列（五）：基础矩阵和本质矩阵 | KxZhang's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          OpenCV中用到的一些函数说明
+          计算机视觉系列（五）：基础矩阵和本质矩阵
         </h1>
 
         <div class="post-meta-container">
@@ -275,15 +277,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2022-05-01 08:46:38" itemprop="dateCreated datePublished" datetime="2022-05-01T08:46:38+08:00">2022-05-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-05-05 19:42:49" itemprop="dateModified" datetime="2022-05-05T19:42:49+08:00">2022-05-05</time>
+      <time title="创建时间：2022-05-09 21:11:10 / 修改时间：21:13:08" itemprop="dateCreated datePublished" datetime="2022-05-09T21:11:10+08:00">2022-05-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -291,7 +287,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/OpenCV/" itemprop="url" rel="index"><span itemprop="name">OpenCV</span></a>
+          <a href="/categories/Computer-Version/" itemprop="url" rel="index"><span itemprop="name">Computer Version</span></a>
         </span>
     </span>
 
@@ -312,14 +308,128 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="取整函数"><a href="#取整函数" class="headerlink" title="取整函数"></a>取整函数</h2><p>cvRound()、cvFloor()、cvCeil()函数</p>
+        <h3 id="对极几何">对极几何</h3>
+<p>先放一张图 <img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/对极几何示意图.png" alt="对极约束示意图"></p>
+<p>设第一帧到第二帧的运动为<span class="math inline">\(R,t\)</span>,两个相机中心分别为<span class="math inline">\(O_1,O_2\)</span>。<span class="math inline">\(p_1\)</span>是<span class="math inline">\(I_1\)</span>中的特征点，对应到<span class="math inline">\(I_2\)</span>中的特征点为<span class="math inline">\(p_2\)</span>。下面通过一些术语来描述他们之间的几何关系。首先，连线<span class="math inline">\(\vec{O_1 p_1}\)</span>和连线<span class="math inline">\(\vec{O_2 p_2}\)</span>在三维空间中相交于<span class="math inline">\(P\)</span>，这是<span class="math inline">\(O_1,O_2,P\)</span>可以确定一个平面，称为极平面，<span class="math inline">\(O_1,O_2\)</span>连线与像平面<span class="math inline">\(I_1,I_2\)</span>的交点分别为<span class="math inline">\(e_1,e_2\)</span>，<span class="math inline">\(e_1,e_2\)</span>被称为极点，<span class="math inline">\(O_1O_2\)</span>被称为基线，我们称极平面与两个像平面<span class="math inline">\(I_1,I_2\)</span>之间的相交线<span class="math inline">\(l_1,l_2\)</span>为极线。</p>
+<h3 id="基础矩阵">基础矩阵</h3>
+<p>对于特征点对<span class="math inline">\(p_1,p_2\)</span>，用基础矩阵<span class="math inline">\(F_{21}\)</span>描述特征点对之间的转换关系</p>
+<p><span class="math display">\[
+   p_2^TF_{21}p_1=0
+\]</span></p>
+<p>写成矩阵形式，有</p>
+<p><span class="math display">\[
+    \begin{bmatrix} v_2&amp;u_2&amp;1 \end{bmatrix}
+    \begin{bmatrix} f_1&amp;f_2&amp;f_3\\f_4&amp;f_5&amp;f_6\\f_7&amp;f_8&amp;f_9 \end{bmatrix}
+    \begin{bmatrix} u_1\\v_1\\1 \end{bmatrix}=0 
+\]</span></p>
+<p>展开得到</p>
+<p><span class="math display">\[
+    \begin{bmatrix} u_1*u_2&amp;v_1*u_2&amp;u_2&amp;u_1*v_2&amp;v_1*v_2&amp;v_2&amp;u_1&amp;v_1&amp;1 \end{bmatrix}
+    \begin{bmatrix} f_1\\f_2\\f_3\\f_4\\f_5\\f_6\\f_7\\f_8\\f_9 \end{bmatrix}=0 
+\]</span></p>
+<p>这样，每对点提供一个约束方程，基础矩阵共有9个元素，7个自由度，且秩为2，所以8对点提供8个约束方程就可以求解F。</p>
+<h3 id="本质矩阵">本质矩阵</h3>
+<p>本质矩阵E和基础矩阵F差了个相机内参矩阵，恢复位姿的时候一般通过本质矩阵恢复，这样可以屏蔽因为相机内参造成的影响。本质矩阵和基础矩阵的关系为</p>
+<p><span class="math display">\[
+   E=K^TFK , E=t^{\land}R
+\]</span></p>
+<p>从本质矩阵恢复相机位姿<span class="math inline">\(R，t\)</span></p>
+<p>对E进行奇异值分解（SVD），对于任意一个E，存在两个可能的<span class="math inline">\(R，t\)</span>与其对应，又因为-E和E等价，所以对任意一个t取负号，得到的结果是一样的，因此通过本质矩阵E分解到<span class="math inline">\(R，t\)</span>时，一共存在4个可能的解。幸运的是，正确的解是唯一的，只有第一个解的空间点P在两个相机中都具有正的深度。</p>
+<p><span class="math display">\[
+   t_1^{\land}=UR_Z(\frac{\pi}{2})DU^T,R_1=UR^T_Z(\frac{\pi}{2})V^T
+\]</span> <span class="math display">\[
+   t_2^{\land}=UR_Z(-\frac{\pi}{2})DU^T,R_2=UR^T_Z(-\frac{\pi}{2})V^T
+\]</span></p>
+<figure>
+<img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/本质矩阵分解1.jpg" alt="本质矩阵分解得到的四组解"><figcaption aria-hidden="true">本质矩阵分解得到的四组解</figcaption>
+</figure>
+<h3 id="三角测量三角化">三角测量（三角化）</h3>
+<p>已知一对匹配好的特征点<span class="math inline">\(x_1,x_2\)</span>，投影矩阵<span class="math inline">\(P_1,P_2\)</span>分别将同一个空间点X投影到两幅图中的<span class="math inline">\(x_1,x_2\)</span>。</p>
+<p>描述为：</p>
+<p><span class="math display">\[
+   x_1=\lambda P_1X
+\]</span> <span class="math display">\[
+   x_2=\lambda P_2X
+\]</span></p>
+<p>对于每一个表达式可以用通用方程来描述： <span class="math display">\[
+    \begin{bmatrix} x\\y\\1 \end{bmatrix}=\lambda
+    \begin{bmatrix} p_1&amp;p_2&amp;p_3&amp;p_4\\p_5&amp;p_6&amp;p_7&amp;p_8\\p_9&amp;p_10&amp;p_11&amp;p_12 \end{bmatrix}
+    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} 
+\]</span></p>
+<p>简记为 <span class="math display">\[
+    \begin{bmatrix} x\\y\\1 \end{bmatrix}=\lambda
+    \begin{bmatrix} -&amp;P_0&amp;-\\-&amp;P_1&amp;-\\-&amp;P_2&amp;-\end{bmatrix}
+    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} 
+\]</span></p>
+<p>两边叉乘x，有 <span class="math display">\[
+    \begin{bmatrix} 0&amp;-1&amp;y\\1&amp;0&amp;-x\\-y&amp;x&amp;0 \end{bmatrix}
+    \begin{bmatrix} -&amp;P_0&amp;-\\-&amp;P_1&amp;-\\-&amp;P_2&amp;-\end{bmatrix}
+    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} =
+    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
+\]</span></p>
+<p>一个点就有</p>
+<p><span class="math display">\[
+    \begin{bmatrix} yP_2-P_1\\P_0-xP_2\\xP_1-yP_0 \end{bmatrix}
+    X =
+    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
+\]</span></p>
+<p>秩为2，取前两行就够了</p>
+<p>一对点的情况如下：</p>
+<p><span class="math display">\[
+    \begin{bmatrix} y_1P_{12}-P_{11}\\P_{10}-x_1P_{12}\\y_2P_{22}-P_{21}\\P_{20}-x_2P_{22} \end{bmatrix}
+    X =
+    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
+\]</span></p>
+<p>变成最小二乘问题，用奇异值分解即可求解X</p>
+<h3 id="各向同性归一化八点法">各向同性归一化（八点法）</h3>
+<p>利用8点法求基础矩阵不稳定的一个主要原因就是原始的图像像点坐标组成的系数矩阵A不好造成的，而造成A不好的原因是像点的齐次坐标各个分量的数量级相差太大。基于这个原因，在应用8点法求基础矩阵之前，先对像点坐标进行归一化处理，即对原始的图像坐标做同向性变换，这样就可以减少噪声的干扰，大大的提高8点法的精度。</p>
+<p>预先对图像坐标进行归一化有以下好处：</p>
 <ul>
-<li>cvRound(): 返回参数最接近的整数值，四舍五入；</li>
-<li>cvFloor(): 返回不大于参数的最大整数值，即向下取整；</li>
-<li>cvCeil(): 返回不小于参数的最小整数值，即向上取整；</li>
+<li>能够提高运算结果的精度</li>
+<li>利用归一化处理后的图像坐标，对任何尺度缩放和原点的选择是不变的。归一化步骤预先为图像坐标选择了一个标准的坐标系中，消除了坐标变换对结果的影响。</li>
 </ul>
-<p>示例：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;opencv2/opencv.hpp&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    waitKey(0);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>运行结果如下</p>
-<p><img src="/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png" alt="opencv"></p>
+<p>归一化操作分两步进行，首先对每幅图像中的坐标进行平移（每幅图像的平移不同）使图像中匹配的点组成的点集的形心（Centroid）移动到原点；接着对坐标系进行缩放使得点<span class="math inline">\(p=(x,y,w)^T\)</span>中的各个分量总体上有一样的平均值，各个坐标轴的缩放相同的，最后选择合适的缩放因子使点p到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。 概括起来变换过程如下：</p>
+<ul>
+<li>对点进行平移使其形心位于原点。</li>
+<li>对点进行缩放，使它们到原点的平均距离为<span class="math inline">\(\sqrt{2}\)</span></li>
+<li>对两幅图像独立进行上述变换</li>
+</ul>
+<figure>
+<img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/归一化.png" alt="归一化"><figcaption aria-hidden="true">归一化</figcaption>
+</figure>
+<p>上图左边是原始图像的坐标，右边是归一化后的坐标，H是归一化的变换矩阵，可记为如下形式：</p>
+<p><span class="math display">\[
+   T=S
+   \begin{bmatrix} 1&amp;0&amp;-\bar{u}\\0&amp;1&amp;-\bar{v}\\0&amp;0&amp;\frac{1}{S} \end{bmatrix}
+\]</span> 其中，<span class="math inline">\(\bar{u},\bar{v}\)</span>是图像点坐标两个分量的平均值</p>
+<p><span class="math display">\[
+   \bar{u}=\frac{1}{N}\sum_{i=1}^N u_i,\bar{v}=\frac{1}{N}\sum_{i=1}^N v_i
+\]</span></p>
+<p>S表示尺度，其表达式为：</p>
+<p><span class="math display">\[
+   S=\frac{\sqrt{2}\cdot N}{\sqrt{\sum_{i=1}^N (u_i-\bar{u})^2+(v_i-\bar{v})^2}}
+\]</span></p>
+<p><strong>注：这里的公式很多网上的博客都错了，分子的N应该在根号外面，这样平均距离才是<span class="math inline">\(\sqrt{2}\)</span>,OpenCV的八点法归一化函数也是这样做的</strong></p>
+<p>这样，首先对原始的图像坐标进行归一化处理，再利用8点法求解基础矩阵，最后将求得的结果解除归一化，得到基础矩阵F，总结如下：</p>
+<ul>
+<li>对图像1进行归一化处理，计算一个只包含平移和缩放的变换<span class="math inline">\(T_1\)</span>，将图像1中的匹配点集<span class="math inline">\(p_i^1\)</span>变换到新的点集<span class="math inline">\(\hat{p_i^1}\)</span>，新点集的形心位于原点<span class="math inline">\((0,0)^T\)</span>，并且它们到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。</li>
+<li>对图像2，计算变换矩阵<span class="math inline">\(T_2\)</span>进行相同的归一化处理</li>
+<li>使用8点法利用变换后的点集估计基础矩阵<span class="math inline">\(\hat{F}\)</span></li>
+<li>建立变换<span class="math inline">\(F=T^T_2\hat{F} T_1\)</span></li>
+</ul>
+<p>对单应矩阵的归一化处理同理，总结如下：</p>
+<ul>
+<li>对图像1进行归一化处理，计算一个只包含平移和缩放的变换<span class="math inline">\(T_1\)</span>，将图像1中的匹配点集<span class="math inline">\(p_i^1\)</span>变换到新的点集<span class="math inline">\(\hat{p_i^1}\)</span>，新点集的形心位于原点<span class="math inline">\((0,0)^T\)</span>，并且它们到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。</li>
+<li>对图像2，计算变换矩阵<span class="math inline">\(T_2\)</span>进行相同的归一化处理</li>
+<li>使用8点法利用变换后的点集估计基础矩阵<span class="math inline">\(\hat{H}\)</span></li>
+<li>建立变换<span class="math inline">\(H=T^{-1}_2 \hat{H}T_1\)</span></li>
+</ul>
+<p>ORB-SLAM2中的归一化操作与论文中的不同，是采取了一阶矩进行归一化，具体来说就是缩放因子分别为</p>
+<p><span class="math display">\[
+   sX=\frac{N}{\sum_{i=1}^N \begin{vmatrix}u_i-\bar{u} \end{vmatrix}},
+   sY=\frac{N}{\sum_{i=1}^N \begin{vmatrix}v_i-\bar{v} \end{vmatrix}}
+\]</span></p>
+<p>至于为什么这样做，还没搞明白。</p>
 
     </div>
 
@@ -329,17 +439,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/OpenCV/" rel="tag"># OpenCV</a>
+              <a href="/tags/Computer-Version/" rel="tag"># Computer Version</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%8D%95%E5%BA%94%E7%9F%A9%E9%98%B5/" rel="prev" title="计算机视觉系列（四）：单应矩阵">
+                  <i class="fa fa-chevron-left"></i> 计算机视觉系列（四）：单应矩阵
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/" rel="next" title="计算机视觉系列（二）：图像梯度">
-                  计算机视觉系列（二）：图像梯度 <i class="fa fa-chevron-right"></i>
+                <a href="/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/" rel="next" title="数学基础（一）：奇异值分解">
+                  数学基础（一）：奇异值分解 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
