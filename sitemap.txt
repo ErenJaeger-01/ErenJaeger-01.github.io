@@ -13,10 +13,10 @@ https://erenjaeger-01.github.io/about/index.html
 https://erenjaeger-01.github.io/
 https://erenjaeger-01.github.io/tags/SLAM/
 https://erenjaeger-01.github.io/tags/OpenCV/
-https://erenjaeger-01.github.io/tags/Computer-Version/
 https://erenjaeger-01.github.io/tags/Math/
+https://erenjaeger-01.github.io/tags/Computer-Version/
 https://erenjaeger-01.github.io/categories/SLAM/
 https://erenjaeger-01.github.io/categories/OpenCV/
 https://erenjaeger-01.github.io/categories/%E6%9D%82%E8%AE%B0/
-https://erenjaeger-01.github.io/categories/Computer-Version/
 https://erenjaeger-01.github.io/categories/Math/
+https://erenjaeger-01.github.io/categories/Computer-Version/

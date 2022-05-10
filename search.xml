@@ -3,18 +3,24 @@
   <entry>
     <title>ORB-SLAM学习（一）：ORB特征提取</title>
     <url>/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/</url>
-    <content><![CDATA[<h2 id="相关知识介绍"><a href="#相关知识介绍" class="headerlink" title="相关知识介绍"></a>相关知识介绍</h2><p><a href="https://kxzhang.cn/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/#more">图像金字塔</a></p>
+    <content><![CDATA[<h2 id="相关知识介绍">相关知识介绍</h2>
+<p><a href="https://kxzhang.cn/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/#more">图像金字塔</a></p>
 <p><a href="https://kxzhang.cn/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/">ORB特征点</a></p>
-<h2 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h2><p>ORB-SLAM2中的ORB特征点提取和OpenCV有所不同。在ORB-SLAM2中进行了一系列操作让特征点均匀的分布在图像中，这样对于后面的位姿估计比较好。OpenCV直接提取的特征点可能会出现扎堆，集中等现象，这样很多特征点就没用了。下面对ORB-SLAM2中的ORB特征点提取的过程进行介绍。</p>
-<h2 id="构建图像金字塔"><a href="#构建图像金字塔" class="headerlink" title="构建图像金字塔"></a>构建图像金字塔</h2><ul>
+<h2 id="绪论">绪论</h2>
+<p>ORB-SLAM2中的ORB特征点提取和OpenCV有所不同。在ORB-SLAM2中进行了一系列操作让特征点均匀的分布在图像中，这样对于后面的位姿估计比较好。OpenCV直接提取的特征点可能会出现扎堆，集中等现象，这样很多特征点就没用了。下面对ORB-SLAM2中的ORB特征点提取的过程进行介绍。</p>
+<h2 id="构建图像金字塔">构建图像金字塔</h2>
+<ul>
 <li><p>首先对图像进行扩展，这一步的目的是为了之后的高斯模糊操作。</p>
-<p><img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/图像扩展.png" alt="图像扩充示意，这一步是把原图像（最里边的矩形）扩展到最外侧的矩形"></p>
-</li>
-<li><p>进行一个循环，把每一层的图像都在上一层图像的基础上进行扩充（或者叫补边），该过程用到了OpenCV中的<em>copyMakeBorder</em>函数和<em>resize</em>函数，扩充的规则为<em>BORDER_REFLECT_101</em>，扩充的效果如下：</p>
-</li>
+<figure>
+<img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/图像扩展.png" alt="图像扩充示意，这一步是把原图像（最里边的矩形）扩展到最外侧的矩形"><figcaption aria-hidden="true">图像扩充示意，这一步是把原图像（最里边的矩形）扩展到最外侧的矩形</figcaption>
+</figure></li>
+<li><p>进行一个循环，把每一层的图像都在上一层图像的基础上进行扩充（或者叫补边），该过程用到了OpenCV中的<em>copyMakeBorder</em>函数和<em>resize</em>函数，扩充的规则为<em>BORDER_REFLECT_101</em>，扩充的效果如下：</p></li>
 </ul>
-<p><img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/图像扩充.png" alt="左边是扩充效果，可以看出是一个类似镜像的效果"></p>
-<h2 id="计算特征点并通过四叉树对特征点进行均匀化操作"><a href="#计算特征点并通过四叉树对特征点进行均匀化操作" class="headerlink" title="计算特征点并通过四叉树对特征点进行均匀化操作"></a>计算特征点并通过四叉树对特征点进行均匀化操作</h2><p>这一步又对每一层进行了一次遍历，干了这些事：</p>
+<figure>
+<img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/图像扩充.png" alt="左边是扩充效果，可以看出是一个类似镜像的效果"><figcaption aria-hidden="true">左边是扩充效果，可以看出是一个类似镜像的效果</figcaption>
+</figure>
+<h2 id="计算特征点并通过四叉树对特征点进行均匀化操作">计算特征点并通过四叉树对特征点进行均匀化操作</h2>
+<p>这一步又对每一层进行了一次遍历，干了这些事：</p>
 <ul>
 <li>把原图像的边扩充3个像素点，这个是为了进行FAST关键点提取预留的计算半径；</li>
 <li>把图像均匀划分成了一堆小格子（均匀化）；</li>
@@ -22,7 +28,9 @@
 <li>把采取到的关键点坐标进行转换，之前是在小方格中的坐标系，现在要通过一些偏移操作转换到原图像下的坐标系；</li>
 <li>调用<em>DistributeOctTree()</em>函数对特征点进行均匀化（ORB-SLAM的精髓之一），关于四叉树均匀化特征点可以通过下面一幅图来表示；</li>
 </ul>
-<p><img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/四叉树.png" alt="四叉树均匀化特征点"></p>
+<figure>
+<img src="/2022/05/05/ORB-SLAM%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/四叉树.png" alt="四叉树均匀化特征点"><figcaption aria-hidden="true">四叉树均匀化特征点</figcaption>
+</figure>
 <ul>
 <li>再进行一次坐标转换，这次是把提取到的关键点坐标转换为金字塔划分那一步的扩展图像的坐标；</li>
 </ul>
@@ -30,15 +38,18 @@
 <ul>
 <li>计算特征点的方向信息，调用<em>IC_Angle()</em>函数，通过一些小操作提高了一些速度。</li>
 </ul>
-<h2 id="计算描述子并进行金字塔图像特征恢复"><a href="#计算描述子并进行金字塔图像特征恢复" class="headerlink" title="计算描述子并进行金字塔图像特征恢复"></a>计算描述子并进行金字塔图像特征恢复</h2><p>这一步一上来又对每层金字塔进行了一次遍历，然后把每层金字塔的特征点个数累加存到了一个变量里，之后根据这个变量设置了描述子矩阵的容量。</p>
+<h2 id="计算描述子并进行金字塔图像特征恢复">计算描述子并进行金字塔图像特征恢复</h2>
+<p>这一步一上来又对每层金字塔进行了一次遍历，然后把每层金字塔的特征点个数累加存到了一个变量里，之后根据这个变量设置了描述子矩阵的容量。</p>
 <p>再来一次遍历（已经麻了），这一步开始计算描述子</p>
 <ul>
 <li>首先对金字塔图像进行高斯模糊，因为BRIEF描述子对噪声敏感，所以要通过高斯模糊消除噪声对描述子的影响，这一步就是用到了之前的图像扩充。高斯模糊方法采用的OpenCV函数<em>GaussianBlur()</em>。</li>
 <li>然后对每个关键点计算描述子，首先要根据之前计算得到的方向对坐标进行旋转，坐标对其之后根据描述子模板进行描述子计算，保存到<em>descriptors</em>矩阵中；</li>
 <li>对于除第0层的图像（也就是最底下那一层），将所有的特征点乘相应层数的缩放因子，投射到最底层图像中，这样就实现了特征点的提取。</li>
 </ul>
-<h2 id="通过内参矩阵对特征点进行去畸变操作"><a href="#通过内参矩阵对特征点进行去畸变操作" class="headerlink" title="通过内参矩阵对特征点进行去畸变操作"></a>通过内参矩阵对特征点进行去畸变操作</h2><p>内参系数在yaml文件中都给写好了，直接调用OpenCV的库函数<em>undistortPoints()</em>进行特征点去畸变操作。</p>
-<h2 id="将特征点分配到网格中"><a href="#将特征点分配到网格中" class="headerlink" title="将特征点分配到网格中"></a>将特征点分配到网格中</h2><p>调用<em>AssignFeaturesToGrid()</em> </p>
+<h2 id="通过内参矩阵对特征点进行去畸变操作">通过内参矩阵对特征点进行去畸变操作</h2>
+<p>内参系数在yaml文件中都给写好了，直接调用OpenCV的库函数<em>undistortPoints()</em>进行特征点去畸变操作。</p>
+<h2 id="将特征点分配到网格中">将特征点分配到网格中</h2>
+<p>调用<em>AssignFeaturesToGrid()</em></p>
 ]]></content>
       <categories>
         <category>SLAM</category>
@@ -144,14 +155,17 @@
   <entry>
     <title>OpenCV中用到的一些函数说明</title>
     <url>/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/</url>
-    <content><![CDATA[<h2 id="取整函数"><a href="#取整函数" class="headerlink" title="取整函数"></a>取整函数</h2><p>cvRound()、cvFloor()、cvCeil()函数</p>
+    <content><![CDATA[<h2 id="取整函数">取整函数</h2>
+<p>cvRound()、cvFloor()、cvCeil()函数</p>
 <ul>
 <li>cvRound(): 返回参数最接近的整数值，四舍五入；</li>
 <li>cvFloor(): 返回不大于参数的最大整数值，即向下取整；</li>
 <li>cvCeil(): 返回不小于参数的最小整数值，即向上取整；</li>
 </ul>
-<p>示例：<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;opencv2/opencv.hpp&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    waitKey(0);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>运行结果如下</p>
-<p><img src="/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png" alt="opencv"></p>
+<p>示例： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;opencv2/opencv.hpp&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; &quot;cvRound(2.5) : &quot; &lt;&lt; cvRound(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvFloor(2.5) : &quot; &lt;&lt; cvFloor(2.5) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;cvCeil(2.5)  : &quot; &lt;&lt; cvCeil(2.5)  &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    waitKey(0);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 运行结果如下</p>
+<figure>
+<img src="/2022/05/01/OpenCV%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/1.png" alt="opencv"><figcaption aria-hidden="true">opencv</figcaption>
+</figure>
 ]]></content>
       <categories>
         <category>OpenCV</category>
@@ -166,24 +180,40 @@
     <content><![CDATA[<p>北京的疫情又严重起来了，五一假期全都在实验室里坐着，每天除了不上课和平时基本没什么区别。最近在学习SLAM，想把学习过程中的一些想法记录下来，又不想拘泥于以前的做法，于是搭建了这个博客网站。不得不说框架真的是很方便，对于我这种对前端一无所知的人来说也能很快的搭好一个看上去还不错（个人感觉）的网站。</p>
 <p>时常觉得自己还挺幸运的，因为对自己的专业，也就是自动化并不讨厌，甚至还挺喜欢，这样起码在学习的过程中不会觉得特别痛苦。大一入学的时候接触到了一些科创活动，碰到了一些很强的人，之后就顺理成章的一路走下来了。从大一寒假决定转专业到自动化，再到之后参加的各种比赛，大四考研，最后到现在的研究生，每一步好像都没有什么犹豫。本科在实验室的日子也是我在南航少数几段有声有色的时光。</p>
 <p>本科做了三年的RoboMaster，这是大疆举办的一个全国性的机器人比赛，大一第一次见到这比赛的时候惊为天人，一瞬间就知道了自己想做的就是这玩意。</p>
-<p><img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/3.jpg" alt="RoboMaster"></p>
+<figure>
+<img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/3.jpg" alt="RoboMaster"><figcaption aria-hidden="true">RoboMaster</figcaption>
+</figure>
 <p>没有半点犹豫，我大一就进去拧了几个月螺丝，同时看看学长是怎么做的，说实话，那段激情燃烧的岁月还是挺值得留恋的，年轻人精力旺盛，一下子熬个几天夜不成问题，半夜的时候七八个人点个夜宵（那时候外卖还是可以直接送到楼下的），拿麦克纳姆轮搭成的半成品车架子当餐桌，凌晨三四点走在回宿舍的路上，校园里静悄悄的，连走路的脚步声都听的很清晰。</p>
-<p><img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/1.jpg" alt="大一实验室的工作台"></p>
-<p><img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/2.jpg" alt="半夜实验室夜宵"></p>
+<figure>
+<img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/1.jpg" alt="大一实验室的工作台"><figcaption aria-hidden="true">大一实验室的工作台</figcaption>
+</figure>
+<figure>
+<img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/2.jpg" alt="半夜实验室夜宵"><figcaption aria-hidden="true">半夜实验室夜宵</figcaption>
+</figure>
 <p>暑假的时候队伍选拔新队员，我整个暑假大部分时间都在学校，只有中间回去了几天，小小缅怀了一下高中母校。当时选拔的题目是做一个倒立摆，那个时候我开始正式的学习STM32单片机，然后发现自己真的是很菜，调个PID都要调好久，遑论之前的底层驱动配置了。暑假的最后二十天整个人进入到一种很纯粹的状态，除了吃饭睡觉洗澡其他时间全在实验室里，终于在验收前几天实现了全部功能。验收的时候我惊讶的发现同时参加选拔的人有三分之二没做出来或者放弃选拔了，其中不乏之前看起来很强的大佬，因为他们高中就接触过类似的东西，而我的高中除了做题打游戏其他的啥也没有。</p>
-<p><img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/4.jpg" alt="倒立摆"></p>
+<figure>
+<img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/4.jpg" alt="倒立摆"><figcaption aria-hidden="true">倒立摆</figcaption>
+</figure>
 <p>做倒立摆的经历算是让我对电控真正的入了个门，同时也意识到做技术好像没有想象中的那么难，电脑也不全是用来打游戏的（误）。</p>
 <p>新学期，我逐渐热衷于参加各种电子设计比赛，当时有一种冲动，想要通过做这些比赛来证明自己，现在看来做比赛有利有弊，好处是确实可以让你在比较短的时间内学到很多东西，坏处是很多东西并没有完全搞懂，浮于表面，毕竟做比赛拿来用，能解决问题就完事了。这个想法给我后面埋了很多坑，最突出的就是大四下学期出去实习画的板子前两版不能用。</p>
 <p>大二一开始参加了校电赛，当时做了一个灯光遥控装置，刚一进去就拿了一等奖，这个比赛让我的自信心再一次爆炸，学习的欲望也随之更加旺盛。</p>
-<p><img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/5.jpg" alt="校电赛"></p>
+<figure>
+<img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/5.jpg" alt="校电赛"><figcaption aria-hidden="true">校电赛</figcaption>
+</figure>
 <p>因为这些比赛，我的大一和大二开始这段时间可谓是顺风顺水，大一学科成绩也在前10%，还有本硕连读资格，好像保研只是水到渠成的事情。当然，人生总是充满了戏剧性，校电赛结束后，我得了肺结核。</p>
 <p>这场病直接毁了之前的一切。我在医院住了一个月，休学了两个月，大二上学期的课程上了一半全部退掉不让考试，堆叠到之后的学期。当医生和我说要住院一个月时我哭的梨花带雨，因为我担心这样会失去保研资格，现在想想当时的想法还挺好笑的。</p>
 <p>大二下学期重新回到学校，课程负担已经因为转专业和休学，同时我又拒绝留级而增加到了一个恐怖的高度，我意识到我无论如何也不可能掌握全部的课程，同时还要做RoboMaster比赛，花一个暑假入的队不能就这么退了，所以我只认真学了在我看来有用的课，比如数电模电，比如信号与线性系统，比如计算机软硬件基础，毛概之类的课能不上就不上，这样整个学期的节奏就还在一个可以接受的范围内。最终我的综合成绩很差，顺理成章的失去了保研资格，但是我认真学了的几门课成绩都还可以，我觉得想要的知识学到就够了。</p>
 <p>大二的RoboMaster我负责了一台步兵机器人的电控，这个比赛也是大二下学期做的，这一年的机器人都做得非常好，平时测试各种移动，自瞄都很稳，但是最后比赛的时候超级电容出了问题，这是整个队伍都疏忽的一点，挺可惜，但是也没有办法，只能认了。</p>
-<p><img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/9.jpg" alt="步兵机器人"></p>
-<p><img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/10.jpg" alt="战队合影"></p>
+<figure>
+<img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/9.jpg" alt="步兵机器人"><figcaption aria-hidden="true">步兵机器人</figcaption>
+</figure>
+<figure>
+<img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/10.jpg" alt="战队合影"><figcaption aria-hidden="true">战队合影</figcaption>
+</figure>
 <p>可能生病只是一个开始，回来后我做的所有事情好像没有一件是成功的。大二暑假全国电赛寄了，本来想靠这个说不定能保研，大三做智能车也寄了，本来想靠这个说不定也能保研。每次校内赛选拔成绩都很好，比如校电赛和智能车的校内赛，智能车校内赛还拿了特等奖，最终比赛都因为莫名其妙的原因出了岔子。智能车另一个组的人拿了我校赛的代码，最后拿了国三。就这样磕磕绊绊过完了整个大三，八月份的时候决定考研。</p>
-<p><img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/11.jpg" alt="智能车"></p>
+<figure>
+<img src="/2022/05/04/%E4%BA%94%E4%B8%80%E5%81%87%E6%9C%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/11.jpg" alt="智能车"><figcaption aria-hidden="true">智能车</figcaption>
+</figure>
 <p>考研那段时间仿佛又找回了从前当小镇做题家的日子，本科做的最后一件算是大一点的事没有出岔子，我如愿以偿来到了北航，然后意识到以前做的东西实验室基本上都不做（大悲），不过学新东西的感觉很好，未来的路也算是明了，起码自己想做什么方向还是有数的，这个程度我已经觉得算是满意了。</p>
 <p>假期最后一天的晚上胡思乱想，翻来覆去睡不着，眼睛瞪得跟铜铃一样，脑子里就在回想这些东西。如果我因为从前的无法无天，不思进取要受到惩罚的话，那么我本科已经为此付出了相应的代价。研究生三年说不定就是学生生涯的结束了，希望这三年（只剩下两年多一点了）能够成长到想要的高度。</p>
 <p>继续加油。</p>
@@ -191,115 +221,6 @@
       <categories>
         <category>杂记</category>
       </categories>
-  </entry>
-  <entry>
-    <title>计算机视觉系列（一）：图像金字塔</title>
-    <url>/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/</url>
-    <content><![CDATA[<h2 id="图像金字塔"><a href="#图像金字塔" class="headerlink" title="图像金字塔"></a>图像金字塔</h2><p>一幅图像的金字塔是一系列以金字塔形状排列，分辨率逐渐降低且源于同一张原始图的图像集合。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。层级越高，图像越小，分辨率越低。图像金字塔是图像中多尺度表达的一种，最初用于机器视觉和图像压缩，最主要功能用于图像分割，是一种以多分辨率来解释图像的有效但概念简单的结构。</p>
-<p><img src="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/1.jpg" alt="pyramid"></p>
-<p>生成图像金字塔主要有两种方式： <strong>向下采样</strong>和<strong>向上采样</strong>。</p>
-<ul>
-<li>向下采样：将图像从最底层（即上图中的level0）转换为level1、level2…的过程，图像分辨率不断降低。</li>
-<li>向上采样：将图像从最顶层（即上图中的level4）转换为level3、level2…的过程，图像分辨率不断增大。</li>
-</ul>
-<p>常见的金字塔一般有两类：</p>
-<ul>
-<li><strong>高斯金字塔</strong>: 用来向下/降采样，主要的图像金字塔；</li>
-<li><strong>拉普拉斯金字塔</strong>: 用来从金字塔低层图像重建上层未采样图像，在数字图像处理中也即是预测残差，可以对图像进行最大程度的还原，配合高斯金字塔一起使用。</li>
-</ul>
-<p>在OpenCv中提供了对图像进行上下采样的接口：<strong>pyrUp()</strong>和<strong>pyrDown()</strong>，同时提供了一个对图像进行尺度变换的函数<strong>resize()</strong>。</p>
-<p>获取金字塔一般来说包括两个步骤：</p>
-<ul>
-<li>对于向下采样，首先对图像进行高斯平滑，然后进行降采样（将图像尺寸行和列方向缩减一半）；</li>
-<li>对于向上采样，首先对图像进行升采样（将图像尺寸行和列方向增大一倍），然后进行高斯平滑；</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Computer Version</category>
-      </categories>
-      <tags>
-        <tag>Computer Version</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算机视觉系列（三）：ORB特征点</title>
-    <url>/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/</url>
-    <content><![CDATA[<h2 id="图像的特征点"><a href="#图像的特征点" class="headerlink" title="图像的特征点"></a>图像的特征点</h2><p>图像的特征点可以理解为图像中比较有代表性的点，这些点在相机视角发生少量变化后会保持不变，于是我们就可以在各个图像中找到相同的点。在SLAM的视觉里程计中，我们需要通过一帧帧连续拍摄的图像来对相机的运动进行估计，因此需要对每一帧图像中提取出特征点，通过这些点对相机的位姿估计进行讨论。</p>
-<h2 id="ORB特征点"><a href="#ORB特征点" class="headerlink" title="ORB特征点"></a>ORB特征点</h2><p><strong>ORB特征点（Oriented FAST and Rotated BRIEF）</strong>是对<strong>FAST关键点</strong>和<strong>BRIEF特征描述子</strong>的一种结合与改进。</p>
-<ul>
-<li>FAST关键点是一种角点，主要检测局部像素区域灰度变化明显的地方，因为只检测亮度，所以速度非常快；</li>
-<li>BRIEF是一种二进制描述子，在提取完关键点后，对每个关键点计算描述子，用来描述关键点周围像素的信息，描述子的设计原则是“ <strong>外观相似的特征应该具有相似的描述子</strong>”。</li>
-</ul>
-<p><img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/fast_speedtest.jpg" alt="FAST关键点"></p>
-<p>虽然FAST关键点速度非常快，但是快有快的缺陷。首先，FAST关键点没有方向信息，因此当图像发生旋转之后，关键点对应的描述子会发生变化；此外，FAST关键点不具有尺度不变性，也就是说不同距离对着同一个物体拍照，远处看起来像关键点的地方，距离近了就可能不是关键点了。对于这两个问题，ORB特征点采用了如下方法进行解决。</p>
-<ul>
-<li>对于尺度问题，构建 <a href="https://kxzhang.cn/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/#more">图像金字塔</a>,得到不同尺度下的不同分辨率图像，对于每一层图像提取特征点，最后再匹配到原图像，这样就实现了关键点的尺度不变性；</li>
-<li>对于旋转问题，ORB特征点采用了灰度质心法计算特征点的方向，通过特征点的方向实现关键点的旋转不变性。</li>
-</ul>
-<h2 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h2><p>OpenCV提取图像特征点</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;opencv2/opencv.hpp&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;chrono&gt;</span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">#define EDGE_THRESHOLD 19</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    std::vector&lt;cv::KeyPoint&gt; keypoints;</span><br><span class="line">    Mat descriptors;</span><br><span class="line">    cv::Ptr&lt;cv::FeatureDetector&gt; detector = cv::ORB::create();</span><br><span class="line">    cv::Ptr&lt;cv::DescriptorExtractor&gt; descriptor = cv::ORB::create();</span><br><span class="line"></span><br><span class="line">    Mat image = imread(&quot;../distorted.png&quot;, IMREAD_COLOR);</span><br><span class="line">    //-- 第一步:检测 Oriented FAST 角点位置</span><br><span class="line">    detector-&gt;detect(image, keypoints);</span><br><span class="line"></span><br><span class="line">    //-- 第二步:根据角点位置计算 BRIEF 描述子</span><br><span class="line">    descriptor-&gt;compute(image, keypoints, descriptors);</span><br><span class="line"></span><br><span class="line">    Mat outimg;</span><br><span class="line">    drawKeypoints(image, keypoints, outimg, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);</span><br><span class="line">    imshow(&quot;原图&quot;, image);</span><br><span class="line">    imshow(&quot;OpenCV函数提取的ORB特征点&quot;, outimg);</span><br><span class="line">    imwrite(&quot;OpenCV提取的ORB特征点.jpg&quot;, outimg);</span><br><span class="line">    waitKey(0);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<p><img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/distorted.png" alt="原图"></p>
-<p><img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/OpenCV提取的特征点.jpg" alt="OpenCV提取的特征点"></p>
-]]></content>
-      <categories>
-        <category>Computer Version</category>
-      </categories>
-      <tags>
-        <tag>Computer Version</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算机视觉系列（二）：图像梯度</title>
-    <url>/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/</url>
-    <content><![CDATA[<h2 id="图像梯度的概念"><a href="#图像梯度的概念" class="headerlink" title="图像梯度的概念"></a>图像梯度的概念</h2><p>图像梯度是指图像某像素在x和y两个方向上的变化率（与相邻像素比较），是一个二维向量，由2个分量组成X轴的变化、Y轴的变化。其中：</p>
-<ul>
-<li>X轴的变化是指当前像素右侧（X加1）的像素值减去当前像素左侧（X减1）的像素值；</li>
-<li>Y轴的变化是当前像素下方（Y加1）的像素值减去当前像素上方（Y减1）的像素值；<br>计算出来这两个分量，会形成一个二维向量，该向量描述了当前像素点的梯度。对这个向量取反正切函数 <strong><em>arctan</em></strong> ，可以得到梯度的角度。</li>
-</ul>
-<h2 id="图像梯度的求解"><a href="#图像梯度的求解" class="headerlink" title="图像梯度的求解"></a>图像梯度的求解</h2><p>图像梯度的求解过程可以用一个卷积核来实现：[-1,0,1]。</p>
-<p>$\nabla{f(x,y)}=$ $\left [ \begin{matrix} g_x\g_y \end{matrix} \right]=$ $\left [ \begin{matrix} \frac{\partial f}{\partial x}\ \frac{\partial f}{\partial y} \end{matrix} \right]=$ $\left [ \begin{matrix} f(x+1,y)-f(x-1,y)\f(x,y+1)-f(x,y-1) \end{matrix} \right]$</p>
-<p><img src="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/2.png" alt="gradient"></p>
-<p>$\nabla{f(x,y)}=$ $\left [ \begin{matrix} f(x+1,y)-f(x-1,y)\f(x,y+1)-f(x,y-1) \end{matrix} \right]=$ $\left [ \begin{matrix} 55-105\90-40 \end{matrix} \right]=$ $\left [ \begin{matrix} -50\ 50 \end{matrix} \right]$</p>
-<p>图像梯度的绝对值为：</p>
-<p>$\sqrt{50^2+(-50)^2}=70.7107$</p>
-<p>图像梯度的角度为：</p>
-<p>$\arctan(-50/50)=-45^\circ$</p>
-]]></content>
-      <categories>
-        <category>Computer Version</category>
-      </categories>
-      <tags>
-        <tag>Computer Version</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数学基础（二）：卡方检验</title>
-    <url>/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%8D%A1%E6%96%B9%E6%A3%80%E9%AA%8C/</url>
-    <content><![CDATA[<h3 id="卡方检验">卡方检验</h3>
-<p>卡方检验通过一个检验统计量来比较期望结果和实际结果之间的差别，然后得出观察频数极值的发生概率。 计算统计量步骤： （期望频数总和与观察频数总和相等） * 表里填写相应的观察频数和期望频数 * 利用卡方公式计算检验统计量：</p>
-<p><span class="math display">\[
-   \chi^2=\sum\frac{(O-E)^2}{E}
-\]</span></p>
-<p>下面进行相关说明：</p>
-<ul>
-<li><p>O代表观察到的频数，也就是实际发生的频数。E代表期望频数。</p></li>
-<li><p>检验统计量<span class="math inline">\(\chi^2\)</span>意义：O与E之间差值越小，检验统计量越小。以E为除数，令差值与期望频数成比例。</p></li>
-<li><p>卡方检验的标准：如果统计量值很小，说明观察频数和期望频数之间的差别不显著，统计量越大，差别越显著。</p></li>
-<li><p>自由度：自由度用于计算检验统计量的独立变量数目，查表用的</p>
-<p>自由度计算：对于单行或单列，自由度=组数-限制数；对于表格类，自由度=（行数-1）*（列数-1）</p></li>
-</ul>
-<p>卡方分布表如下所示</p>
-<figure>
-<img src="/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%8D%A1%E6%96%B9%E6%A3%80%E9%AA%8C/卡方分布表.png" alt="卡方分布表"><figcaption aria-hidden="true">卡方分布表</figcaption>
-</figure>
-]]></content>
-      <categories>
-        <category>Math</category>
-      </categories>
-      <tags>
-        <tag>Math</tag>
-      </tags>
   </entry>
   <entry>
     <title>数学基础（一）：奇异值分解</title>
@@ -352,130 +273,122 @@ U^TU=I,V^TV=I
       </tags>
   </entry>
   <entry>
-    <title>计算机视觉系列（五）：基础矩阵和本质矩阵</title>
-    <url>/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/</url>
-    <content><![CDATA[<h3 id="对极几何">对极几何</h3>
-<p>先放一张图 <img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/对极几何示意图.png" alt="对极约束示意图"></p>
-<p>设第一帧到第二帧的运动为<span class="math inline">\(R,t\)</span>,两个相机中心分别为<span class="math inline">\(O_1,O_2\)</span>。<span class="math inline">\(p_1\)</span>是<span class="math inline">\(I_1\)</span>中的特征点，对应到<span class="math inline">\(I_2\)</span>中的特征点为<span class="math inline">\(p_2\)</span>。下面通过一些术语来描述他们之间的几何关系。首先，连线<span class="math inline">\(\vec{O_1 p_1}\)</span>和连线<span class="math inline">\(\vec{O_2 p_2}\)</span>在三维空间中相交于<span class="math inline">\(P\)</span>，这是<span class="math inline">\(O_1,O_2,P\)</span>可以确定一个平面，称为极平面，<span class="math inline">\(O_1,O_2\)</span>连线与像平面<span class="math inline">\(I_1,I_2\)</span>的交点分别为<span class="math inline">\(e_1,e_2\)</span>，<span class="math inline">\(e_1,e_2\)</span>被称为极点，<span class="math inline">\(O_1O_2\)</span>被称为基线，我们称极平面与两个像平面<span class="math inline">\(I_1,I_2\)</span>之间的相交线<span class="math inline">\(l_1,l_2\)</span>为极线。</p>
-<h3 id="基础矩阵">基础矩阵</h3>
-<p>对于特征点对<span class="math inline">\(p_1,p_2\)</span>，用基础矩阵<span class="math inline">\(F_{21}\)</span>描述特征点对之间的转换关系</p>
+    <title>数学基础（二）：卡方检验</title>
+    <url>/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%8D%A1%E6%96%B9%E6%A3%80%E9%AA%8C/</url>
+    <content><![CDATA[<h3 id="卡方检验">卡方检验</h3>
+<p>卡方检验通过一个检验统计量来比较期望结果和实际结果之间的差别，然后得出观察频数极值的发生概率。 计算统计量步骤： （期望频数总和与观察频数总和相等） * 表里填写相应的观察频数和期望频数 * 利用卡方公式计算检验统计量：</p>
 <p><span class="math display">\[
-   p_2^TF_{21}p_1=0
+   \chi^2=\sum\frac{(O-E)^2}{E}
 \]</span></p>
-<p>写成矩阵形式，有</p>
-<p><span class="math display">\[
-    \begin{bmatrix} v_2&amp;u_2&amp;1 \end{bmatrix}
-    \begin{bmatrix} f_1&amp;f_2&amp;f_3\\f_4&amp;f_5&amp;f_6\\f_7&amp;f_8&amp;f_9 \end{bmatrix}
-    \begin{bmatrix} u_1\\v_1\\1 \end{bmatrix}=0 
-\]</span></p>
-<p>展开得到</p>
-<p><span class="math display">\[
-    \begin{bmatrix} u_1*u_2&amp;v_1*u_2&amp;u_2&amp;u_1*v_2&amp;v_1*v_2&amp;v_2&amp;u_1&amp;v_1&amp;1 \end{bmatrix}
-    \begin{bmatrix} f_1\\f_2\\f_3\\f_4\\f_5\\f_6\\f_7\\f_8\\f_9 \end{bmatrix}=0 
-\]</span></p>
-<p>这样，每对点提供一个约束方程，基础矩阵共有9个元素，7个自由度，且秩为2，所以8对点提供8个约束方程就可以求解F。</p>
-<h3 id="本质矩阵">本质矩阵</h3>
-<p>本质矩阵E和基础矩阵F差了个相机内参矩阵，恢复位姿的时候一般通过本质矩阵恢复，这样可以屏蔽因为相机内参造成的影响。本质矩阵和基础矩阵的关系为</p>
-<p><span class="math display">\[
-   E=K^TFK , E=t^{\land}R
-\]</span></p>
-<p>从本质矩阵恢复相机位姿<span class="math inline">\(R，t\)</span></p>
-<p>对E进行奇异值分解（SVD），对于任意一个E，存在两个可能的<span class="math inline">\(R，t\)</span>与其对应，又因为-E和E等价，所以对任意一个t取负号，得到的结果是一样的，因此通过本质矩阵E分解到<span class="math inline">\(R，t\)</span>时，一共存在4个可能的解。幸运的是，正确的解是唯一的，只有第一个解的空间点P在两个相机中都具有正的深度。</p>
-<p><span class="math display">\[
-   t_1^{\land}=UR_Z(\frac{\pi}{2})DU^T,R_1=UR^T_Z(\frac{\pi}{2})V^T
-\]</span> <span class="math display">\[
-   t_2^{\land}=UR_Z(-\frac{\pi}{2})DU^T,R_2=UR^T_Z(-\frac{\pi}{2})V^T
-\]</span></p>
-<figure>
-<img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/本质矩阵分解1.jpg" alt="本质矩阵分解得到的四组解"><figcaption aria-hidden="true">本质矩阵分解得到的四组解</figcaption>
-</figure>
-<h3 id="三角测量三角化">三角测量（三角化）</h3>
-<p>已知一对匹配好的特征点<span class="math inline">\(x_1,x_2\)</span>，投影矩阵<span class="math inline">\(P_1,P_2\)</span>分别将同一个空间点X投影到两幅图中的<span class="math inline">\(x_1,x_2\)</span>。</p>
-<p>描述为：</p>
-<p><span class="math display">\[
-   x_1=\lambda P_1X
-\]</span> <span class="math display">\[
-   x_2=\lambda P_2X
-\]</span></p>
-<p>对于每一个表达式可以用通用方程来描述： <span class="math display">\[
-    \begin{bmatrix} x\\y\\1 \end{bmatrix}=\lambda
-    \begin{bmatrix} p_1&amp;p_2&amp;p_3&amp;p_4\\p_5&amp;p_6&amp;p_7&amp;p_8\\p_9&amp;p_10&amp;p_11&amp;p_12 \end{bmatrix}
-    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} 
-\]</span></p>
-<p>简记为 <span class="math display">\[
-    \begin{bmatrix} x\\y\\1 \end{bmatrix}=\lambda
-    \begin{bmatrix} -&amp;P_0&amp;-\\-&amp;P_1&amp;-\\-&amp;P_2&amp;-\end{bmatrix}
-    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} 
-\]</span></p>
-<p>两边叉乘x，有 <span class="math display">\[
-    \begin{bmatrix} 0&amp;-1&amp;y\\1&amp;0&amp;-x\\-y&amp;x&amp;0 \end{bmatrix}
-    \begin{bmatrix} -&amp;P_0&amp;-\\-&amp;P_1&amp;-\\-&amp;P_2&amp;-\end{bmatrix}
-    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} =
-    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
-\]</span></p>
-<p>一个点就有</p>
-<p><span class="math display">\[
-    \begin{bmatrix} yP_2-P_1\\P_0-xP_2\\xP_1-yP_0 \end{bmatrix}
-    X =
-    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
-\]</span></p>
-<p>秩为2，取前两行就够了</p>
-<p>一对点的情况如下：</p>
-<p><span class="math display">\[
-    \begin{bmatrix} y_1P_{12}-P_{11}\\P_{10}-x_1P_{12}\\y_2P_{22}-P_{21}\\P_{20}-x_2P_{22} \end{bmatrix}
-    X =
-    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
-\]</span></p>
-<p>变成最小二乘问题，用奇异值分解即可求解X</p>
-<h3 id="各向同性归一化八点法">各向同性归一化（八点法）</h3>
-<p>利用8点法求基础矩阵不稳定的一个主要原因就是原始的图像像点坐标组成的系数矩阵A不好造成的，而造成A不好的原因是像点的齐次坐标各个分量的数量级相差太大。基于这个原因，在应用8点法求基础矩阵之前，先对像点坐标进行归一化处理，即对原始的图像坐标做同向性变换，这样就可以减少噪声的干扰，大大的提高8点法的精度。</p>
-<p>预先对图像坐标进行归一化有以下好处：</p>
+<p>下面进行相关说明：</p>
 <ul>
-<li>能够提高运算结果的精度</li>
-<li>利用归一化处理后的图像坐标，对任何尺度缩放和原点的选择是不变的。归一化步骤预先为图像坐标选择了一个标准的坐标系中，消除了坐标变换对结果的影响。</li>
+<li><p>O代表观察到的频数，也就是实际发生的频数。E代表期望频数。</p></li>
+<li><p>检验统计量<span class="math inline">\(\chi^2\)</span>意义：O与E之间差值越小，检验统计量越小。以E为除数，令差值与期望频数成比例。</p></li>
+<li><p>卡方检验的标准：如果统计量值很小，说明观察频数和期望频数之间的差别不显著，统计量越大，差别越显著。</p></li>
+<li><p>自由度：自由度用于计算检验统计量的独立变量数目，查表用的</p>
+<p>自由度计算：对于单行或单列，自由度=组数-限制数；对于表格类，自由度=（行数-1）*（列数-1）</p></li>
 </ul>
-<p>归一化操作分两步进行，首先对每幅图像中的坐标进行平移（每幅图像的平移不同）使图像中匹配的点组成的点集的形心（Centroid）移动到原点；接着对坐标系进行缩放使得点<span class="math inline">\(p=(x,y,w)^T\)</span>中的各个分量总体上有一样的平均值，各个坐标轴的缩放相同的，最后选择合适的缩放因子使点p到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。 概括起来变换过程如下：</p>
+<p>卡方分布表如下所示</p>
+<figure>
+<img src="/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%8D%A1%E6%96%B9%E6%A3%80%E9%AA%8C/卡方分布表.png" alt="卡方分布表"><figcaption aria-hidden="true">卡方分布表</figcaption>
+</figure>
+]]></content>
+      <categories>
+        <category>Math</category>
+      </categories>
+      <tags>
+        <tag>Math</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机视觉系列（一）：图像金字塔</title>
+    <url>/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/</url>
+    <content><![CDATA[<h2 id="图像金字塔">图像金字塔</h2>
+<p>一幅图像的金字塔是一系列以金字塔形状排列，分辨率逐渐降低且源于同一张原始图的图像集合。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。层级越高，图像越小，分辨率越低。图像金字塔是图像中多尺度表达的一种，最初用于机器视觉和图像压缩，最主要功能用于图像分割，是一种以多分辨率来解释图像的有效但概念简单的结构。</p>
+<figure>
+<img src="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/1.jpg" alt="pyramid"><figcaption aria-hidden="true">pyramid</figcaption>
+</figure>
+<p>生成图像金字塔主要有两种方式： <strong>向下采样</strong>和<strong>向上采样</strong>。</p>
 <ul>
-<li>对点进行平移使其形心位于原点。</li>
-<li>对点进行缩放，使它们到原点的平均距离为<span class="math inline">\(\sqrt{2}\)</span></li>
-<li>对两幅图像独立进行上述变换</li>
+<li>向下采样：将图像从最底层（即上图中的level0）转换为level1、level2...的过程，图像分辨率不断降低。</li>
+<li>向上采样：将图像从最顶层（即上图中的level4）转换为level3、level2...的过程，图像分辨率不断增大。</li>
+</ul>
+<p>常见的金字塔一般有两类：</p>
+<ul>
+<li><strong>高斯金字塔</strong>: 用来向下/降采样，主要的图像金字塔；</li>
+<li><strong>拉普拉斯金字塔</strong>: 用来从金字塔低层图像重建上层未采样图像，在数字图像处理中也即是预测残差，可以对图像进行最大程度的还原，配合高斯金字塔一起使用。</li>
+</ul>
+<p>在OpenCv中提供了对图像进行上下采样的接口：<strong>pyrUp()</strong>和<strong>pyrDown()</strong>，同时提供了一个对图像进行尺度变换的函数<strong>resize()</strong>。</p>
+<p>获取金字塔一般来说包括两个步骤：</p>
+<ul>
+<li>对于向下采样，首先对图像进行高斯平滑，然后进行降采样（将图像尺寸行和列方向缩减一半）；</li>
+<li>对于向上采样，首先对图像进行升采样（将图像尺寸行和列方向增大一倍），然后进行高斯平滑；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Computer Version</category>
+      </categories>
+      <tags>
+        <tag>Computer Version</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机视觉系列（三）：ORB特征点</title>
+    <url>/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/</url>
+    <content><![CDATA[<h2 id="图像的特征点">图像的特征点</h2>
+<p>图像的特征点可以理解为图像中比较有代表性的点，这些点在相机视角发生少量变化后会保持不变，于是我们就可以在各个图像中找到相同的点。在SLAM的视觉里程计中，我们需要通过一帧帧连续拍摄的图像来对相机的运动进行估计，因此需要对每一帧图像中提取出特征点，通过这些点对相机的位姿估计进行讨论。</p>
+<h2 id="orb特征点">ORB特征点</h2>
+<p><strong>ORB特征点（Oriented FAST and Rotated BRIEF）</strong>是对<strong>FAST关键点</strong>和<strong>BRIEF特征描述子</strong>的一种结合与改进。</p>
+<ul>
+<li>FAST关键点是一种角点，主要检测局部像素区域灰度变化明显的地方，因为只检测亮度，所以速度非常快；</li>
+<li>BRIEF是一种二进制描述子，在提取完关键点后，对每个关键点计算描述子，用来描述关键点周围像素的信息，描述子的设计原则是“ <strong>外观相似的特征应该具有相似的描述子</strong>”。</li>
 </ul>
 <figure>
-<img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/归一化.png" alt="归一化"><figcaption aria-hidden="true">归一化</figcaption>
+<img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/fast_speedtest.jpg" alt="FAST关键点"><figcaption aria-hidden="true">FAST关键点</figcaption>
 </figure>
-<p>上图左边是原始图像的坐标，右边是归一化后的坐标，H是归一化的变换矩阵，可记为如下形式：</p>
-<p><span class="math display">\[
-   T=S
-   \begin{bmatrix} 1&amp;0&amp;-\bar{u}\\0&amp;1&amp;-\bar{v}\\0&amp;0&amp;\frac{1}{S} \end{bmatrix}
-\]</span> 其中，<span class="math inline">\(\bar{u},\bar{v}\)</span>是图像点坐标两个分量的平均值</p>
-<p><span class="math display">\[
-   \bar{u}=\frac{1}{N}\sum_{i=1}^N u_i,\bar{v}=\frac{1}{N}\sum_{i=1}^N v_i
-\]</span></p>
-<p>S表示尺度，其表达式为：</p>
-<p><span class="math display">\[
-   S=\frac{\sqrt{2}\cdot N}{\sqrt{\sum_{i=1}^N (u_i-\bar{u})^2+(v_i-\bar{v})^2}}
-\]</span></p>
-<p><strong>注：这里的公式很多网上的博客都错了，分子的N应该在根号外面，这样平均距离才是<span class="math inline">\(\sqrt{2}\)</span>,OpenCV的八点法归一化函数也是这样做的</strong></p>
-<p>这样，首先对原始的图像坐标进行归一化处理，再利用8点法求解基础矩阵，最后将求得的结果解除归一化，得到基础矩阵F，总结如下：</p>
+<p>虽然FAST关键点速度非常快，但是快有快的缺陷。首先，FAST关键点没有方向信息，因此当图像发生旋转之后，关键点对应的描述子会发生变化；此外，FAST关键点不具有尺度不变性，也就是说不同距离对着同一个物体拍照，远处看起来像关键点的地方，距离近了就可能不是关键点了。对于这两个问题，ORB特征点采用了如下方法进行解决。</p>
 <ul>
-<li>对图像1进行归一化处理，计算一个只包含平移和缩放的变换<span class="math inline">\(T_1\)</span>，将图像1中的匹配点集<span class="math inline">\(p_i^1\)</span>变换到新的点集<span class="math inline">\(\hat{p_i^1}\)</span>，新点集的形心位于原点<span class="math inline">\((0,0)^T\)</span>，并且它们到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。</li>
-<li>对图像2，计算变换矩阵<span class="math inline">\(T_2\)</span>进行相同的归一化处理</li>
-<li>使用8点法利用变换后的点集估计基础矩阵<span class="math inline">\(\hat{F}\)</span></li>
-<li>建立变换<span class="math inline">\(F=T^T_2\hat{F} T_1\)</span></li>
+<li>对于尺度问题，构建 <a href="https://kxzhang.cn/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/#more">图像金字塔</a>,得到不同尺度下的不同分辨率图像，对于每一层图像提取特征点，最后再匹配到原图像，这样就实现了关键点的尺度不变性；</li>
+<li>对于旋转问题，ORB特征点采用了灰度质心法计算特征点的方向，通过特征点的方向实现关键点的旋转不变性。</li>
 </ul>
-<p>对单应矩阵的归一化处理同理，总结如下：</p>
+<h2 id="举个例子">举个例子</h2>
+<p>OpenCV提取图像特征点</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;opencv2/opencv.hpp&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;chrono&gt;</span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">#define EDGE_THRESHOLD 19</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    std::vector&lt;cv::KeyPoint&gt; keypoints;</span><br><span class="line">    Mat descriptors;</span><br><span class="line">    cv::Ptr&lt;cv::FeatureDetector&gt; detector = cv::ORB::create();</span><br><span class="line">    cv::Ptr&lt;cv::DescriptorExtractor&gt; descriptor = cv::ORB::create();</span><br><span class="line"></span><br><span class="line">    Mat image = imread(&quot;../distorted.png&quot;, IMREAD_COLOR);</span><br><span class="line">    //-- 第一步:检测 Oriented FAST 角点位置</span><br><span class="line">    detector-&gt;detect(image, keypoints);</span><br><span class="line"></span><br><span class="line">    //-- 第二步:根据角点位置计算 BRIEF 描述子</span><br><span class="line">    descriptor-&gt;compute(image, keypoints, descriptors);</span><br><span class="line"></span><br><span class="line">    Mat outimg;</span><br><span class="line">    drawKeypoints(image, keypoints, outimg, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);</span><br><span class="line">    imshow(&quot;原图&quot;, image);</span><br><span class="line">    imshow(&quot;OpenCV函数提取的ORB特征点&quot;, outimg);</span><br><span class="line">    imwrite(&quot;OpenCV提取的ORB特征点.jpg&quot;, outimg);</span><br><span class="line">    waitKey(0);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure>
+<img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/distorted.png" alt="原图"><figcaption aria-hidden="true">原图</figcaption>
+</figure>
+<figure>
+<img src="/2022/05/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AORB%E7%89%B9%E5%BE%81%E7%82%B9/OpenCV提取的特征点.jpg" alt="OpenCV提取的特征点"><figcaption aria-hidden="true">OpenCV提取的特征点</figcaption>
+</figure>
+]]></content>
+      <categories>
+        <category>Computer Version</category>
+      </categories>
+      <tags>
+        <tag>Computer Version</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机视觉系列（二）：图像梯度</title>
+    <url>/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/</url>
+    <content><![CDATA[<h2 id="图像梯度的概念">图像梯度的概念</h2>
+<p>图像梯度是指图像某像素在x和y两个方向上的变化率（与相邻像素比较），是一个二维向量，由2个分量组成X轴的变化、Y轴的变化。其中：</p>
 <ul>
-<li>对图像1进行归一化处理，计算一个只包含平移和缩放的变换<span class="math inline">\(T_1\)</span>，将图像1中的匹配点集<span class="math inline">\(p_i^1\)</span>变换到新的点集<span class="math inline">\(\hat{p_i^1}\)</span>，新点集的形心位于原点<span class="math inline">\((0,0)^T\)</span>，并且它们到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。</li>
-<li>对图像2，计算变换矩阵<span class="math inline">\(T_2\)</span>进行相同的归一化处理</li>
-<li>使用8点法利用变换后的点集估计基础矩阵<span class="math inline">\(\hat{H}\)</span></li>
-<li>建立变换<span class="math inline">\(H=T^{-1}_2 \hat{H}T_1\)</span></li>
+<li>X轴的变化是指当前像素右侧（X加1）的像素值减去当前像素左侧（X减1）的像素值；</li>
+<li>Y轴的变化是当前像素下方（Y加1）的像素值减去当前像素上方（Y减1）的像素值； 计算出来这两个分量，会形成一个二维向量，该向量描述了当前像素点的梯度。对这个向量取反正切函数 <strong><em>arctan</em></strong> ，可以得到梯度的角度。</li>
 </ul>
-<p>ORB-SLAM2中的归一化操作与论文中的不同，是采取了一阶矩进行归一化，具体来说就是缩放因子分别为</p>
-<p><span class="math display">\[
-   sX=\frac{N}{\sum_{i=1}^N \begin{vmatrix}u_i-\bar{u} \end{vmatrix}},
-   sY=\frac{N}{\sum_{i=1}^N \begin{vmatrix}v_i-\bar{v} \end{vmatrix}}
-\]</span></p>
-<p>至于为什么这样做，还没搞明白。</p>
+<h2 id="图像梯度的求解">图像梯度的求解</h2>
+<p>图像梯度的求解过程可以用一个卷积核来实现：[-1,0,1]。</p>
+<p><span class="math inline">\(\nabla{f(x,y)}=\)</span> <span class="math inline">\(\left [ \begin{matrix} g_x\\g_y \end{matrix} \right]=\)</span> <span class="math inline">\(\left [ \begin{matrix} \frac{\partial f}{\partial x}\\ \frac{\partial f}{\partial y} \end{matrix} \right]=\)</span> <span class="math inline">\(\left [ \begin{matrix} f(x+1,y)-f(x-1,y)\\f(x,y+1)-f(x,y-1) \end{matrix} \right]\)</span></p>
+<figure>
+<img src="/2022/05/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6/2.png" alt="gradient"><figcaption aria-hidden="true">gradient</figcaption>
+</figure>
+<p><span class="math inline">\(\nabla{f(x,y)}=\)</span> <span class="math inline">\(\left [ \begin{matrix} f(x+1,y)-f(x-1,y)\\f(x,y+1)-f(x,y-1) \end{matrix} \right]=\)</span> <span class="math inline">\(\left [ \begin{matrix} 55-105\\90-40 \end{matrix} \right]=\)</span> <span class="math inline">\(\left [ \begin{matrix} -50\\ 50 \end{matrix} \right]\)</span></p>
+<p>图像梯度的绝对值为：</p>
+<p><span class="math inline">\(\sqrt{50^2+(-50)^2}=70.7107\)</span></p>
+<p>图像梯度的角度为：</p>
+<p><span class="math inline">\(\arctan(-50/50)=-45^\circ\)</span></p>
 ]]></content>
       <categories>
         <category>Computer Version</category>
@@ -611,6 +524,139 @@ x_{3}=\varepsilon_{3} \sqrt{\frac{d_{2}^{2}-d_{3}^{2}}{d_{1}^{1}-d_{3}^{2}}}
    \end{pmatrix}
 \]</span></p>
 <p>可以看出，平移向量和每组解都有联系，因此就成了2*4=8组解，选出3D点在相机前方最多的解为最优解。</p>
+]]></content>
+      <categories>
+        <category>Computer Version</category>
+      </categories>
+      <tags>
+        <tag>Computer Version</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机视觉系列（五）：基础矩阵和本质矩阵</title>
+    <url>/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/</url>
+    <content><![CDATA[<h3 id="对极几何">对极几何</h3>
+<p>先放一张图 <img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/对极几何示意图.png" alt="对极约束示意图"></p>
+<p>设第一帧到第二帧的运动为<span class="math inline">\(R,t\)</span>,两个相机中心分别为<span class="math inline">\(O_1,O_2\)</span>。<span class="math inline">\(p_1\)</span>是<span class="math inline">\(I_1\)</span>中的特征点，对应到<span class="math inline">\(I_2\)</span>中的特征点为<span class="math inline">\(p_2\)</span>。下面通过一些术语来描述他们之间的几何关系。首先，连线<span class="math inline">\(\vec{O_1 p_1}\)</span>和连线<span class="math inline">\(\vec{O_2 p_2}\)</span>在三维空间中相交于<span class="math inline">\(P\)</span>，这是<span class="math inline">\(O_1,O_2,P\)</span>可以确定一个平面，称为极平面，<span class="math inline">\(O_1,O_2\)</span>连线与像平面<span class="math inline">\(I_1,I_2\)</span>的交点分别为<span class="math inline">\(e_1,e_2\)</span>，<span class="math inline">\(e_1,e_2\)</span>被称为极点，<span class="math inline">\(O_1O_2\)</span>被称为基线，我们称极平面与两个像平面<span class="math inline">\(I_1,I_2\)</span>之间的相交线<span class="math inline">\(l_1,l_2\)</span>为极线。</p>
+<h3 id="基础矩阵">基础矩阵</h3>
+<p>对于特征点对<span class="math inline">\(p_1,p_2\)</span>，用基础矩阵<span class="math inline">\(F_{21}\)</span>描述特征点对之间的转换关系</p>
+<p><span class="math display">\[
+   p_2^TF_{21}p_1=0
+\]</span></p>
+<p>写成矩阵形式，有</p>
+<p><span class="math display">\[
+    \begin{bmatrix} v_2&amp;u_2&amp;1 \end{bmatrix}
+    \begin{bmatrix} f_1&amp;f_2&amp;f_3\\f_4&amp;f_5&amp;f_6\\f_7&amp;f_8&amp;f_9 \end{bmatrix}
+    \begin{bmatrix} u_1\\v_1\\1 \end{bmatrix}=0 
+\]</span></p>
+<p>展开得到</p>
+<p><span class="math display">\[
+    \begin{bmatrix} u_1*u_2&amp;v_1*u_2&amp;u_2&amp;u_1*v_2&amp;v_1*v_2&amp;v_2&amp;u_1&amp;v_1&amp;1 \end{bmatrix}
+    \begin{bmatrix} f_1\\f_2\\f_3\\f_4\\f_5\\f_6\\f_7\\f_8\\f_9 \end{bmatrix}=0 
+\]</span></p>
+<p>这样，每对点提供一个约束方程，基础矩阵共有9个元素，7个自由度，且秩为2，所以8对点提供8个约束方程就可以求解F。</p>
+<h3 id="本质矩阵">本质矩阵</h3>
+<p>本质矩阵E和基础矩阵F差了个相机内参矩阵，恢复位姿的时候一般通过本质矩阵恢复，这样可以屏蔽因为相机内参造成的影响。本质矩阵和基础矩阵的关系为</p>
+<p><span class="math display">\[
+   E=K^TFK , E=t^{\land}R
+\]</span></p>
+<p>从本质矩阵恢复相机位姿<span class="math inline">\(R，t\)</span></p>
+<p>对E进行奇异值分解（SVD），对于任意一个E，存在两个可能的<span class="math inline">\(R，t\)</span>与其对应，又因为-E和E等价，所以对任意一个t取负号，得到的结果是一样的，因此通过本质矩阵E分解到<span class="math inline">\(R，t\)</span>时，一共存在4个可能的解。幸运的是，正确的解是唯一的，只有第一个解的空间点P在两个相机中都具有正的深度。</p>
+<p><span class="math display">\[
+   t_1^{\land}=UR_Z(\frac{\pi}{2})DU^T,R_1=UR^T_Z(\frac{\pi}{2})V^T
+\]</span> <span class="math display">\[
+   t_2^{\land}=UR_Z(-\frac{\pi}{2})DU^T,R_2=UR^T_Z(-\frac{\pi}{2})V^T
+\]</span></p>
+<figure>
+<img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/本质矩阵分解1.jpg" alt="本质矩阵分解得到的四组解"><figcaption aria-hidden="true">本质矩阵分解得到的四组解</figcaption>
+</figure>
+<h3 id="三角测量三角化">三角测量（三角化）</h3>
+<p>已知一对匹配好的特征点<span class="math inline">\(x_1,x_2\)</span>，投影矩阵<span class="math inline">\(P_1,P_2\)</span>分别将同一个空间点X投影到两幅图中的<span class="math inline">\(x_1,x_2\)</span>。</p>
+<p>描述为：</p>
+<p><span class="math display">\[
+   x_1=\lambda P_1X
+\]</span> <span class="math display">\[
+   x_2=\lambda P_2X
+\]</span></p>
+<p>对于每一个表达式可以用通用方程来描述： <span class="math display">\[
+    \begin{bmatrix} x\\y\\1 \end{bmatrix}=\lambda
+    \begin{bmatrix} p_1&amp;p_2&amp;p_3&amp;p_4\\p_5&amp;p_6&amp;p_7&amp;p_8\\p_9&amp;p_10&amp;p_11&amp;p_12 \end{bmatrix}
+    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} 
+\]</span></p>
+<p>简记为 <span class="math display">\[
+    \begin{bmatrix} x\\y\\1 \end{bmatrix}=\lambda
+    \begin{bmatrix} -&amp;P_0&amp;-\\-&amp;P_1&amp;-\\-&amp;P_2&amp;-\end{bmatrix}
+    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} 
+\]</span></p>
+<p>两边叉乘x，有 <span class="math display">\[
+    \begin{bmatrix} 0&amp;-1&amp;y\\1&amp;0&amp;-x\\-y&amp;x&amp;0 \end{bmatrix}
+    \begin{bmatrix} -&amp;P_0&amp;-\\-&amp;P_1&amp;-\\-&amp;P_2&amp;-\end{bmatrix}
+    \begin{bmatrix} X\\Y\\Z\\1 \end{bmatrix} =
+    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
+\]</span></p>
+<p>一个点就有</p>
+<p><span class="math display">\[
+    \begin{bmatrix} yP_2-P_1\\P_0-xP_2\\xP_1-yP_0 \end{bmatrix}
+    X =
+    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
+\]</span></p>
+<p>秩为2，取前两行就够了</p>
+<p>一对点的情况如下：</p>
+<p><span class="math display">\[
+    \begin{bmatrix} y_1P_{12}-P_{11}\\P_{10}-x_1P_{12}\\y_2P_{22}-P_{21}\\P_{20}-x_2P_{22} \end{bmatrix}
+    X =
+    \begin{bmatrix} 0\\0\\0 \end{bmatrix}
+\]</span></p>
+<p>变成最小二乘问题，用奇异值分解即可求解X</p>
+<h3 id="各向同性归一化八点法">各向同性归一化（八点法）</h3>
+<p>利用8点法求基础矩阵不稳定的一个主要原因就是原始的图像像点坐标组成的系数矩阵A不好造成的，而造成A不好的原因是像点的齐次坐标各个分量的数量级相差太大。基于这个原因，在应用8点法求基础矩阵之前，先对像点坐标进行归一化处理，即对原始的图像坐标做同向性变换，这样就可以减少噪声的干扰，大大的提高8点法的精度。</p>
+<p>预先对图像坐标进行归一化有以下好处：</p>
+<ul>
+<li>能够提高运算结果的精度</li>
+<li>利用归一化处理后的图像坐标，对任何尺度缩放和原点的选择是不变的。归一化步骤预先为图像坐标选择了一个标准的坐标系中，消除了坐标变换对结果的影响。</li>
+</ul>
+<p>归一化操作分两步进行，首先对每幅图像中的坐标进行平移（每幅图像的平移不同）使图像中匹配的点组成的点集的形心（Centroid）移动到原点；接着对坐标系进行缩放使得点<span class="math inline">\(p=(x,y,w)^T\)</span>中的各个分量总体上有一样的平均值，各个坐标轴的缩放相同的，最后选择合适的缩放因子使点p到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。 概括起来变换过程如下：</p>
+<ul>
+<li>对点进行平移使其形心位于原点。</li>
+<li>对点进行缩放，使它们到原点的平均距离为<span class="math inline">\(\sqrt{2}\)</span></li>
+<li>对两幅图像独立进行上述变换</li>
+</ul>
+<figure>
+<img src="/2022/05/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5%E5%92%8C%E6%9C%AC%E8%B4%A8%E7%9F%A9%E9%98%B5/归一化.png" alt="归一化"><figcaption aria-hidden="true">归一化</figcaption>
+</figure>
+<p>上图左边是原始图像的坐标，右边是归一化后的坐标，H是归一化的变换矩阵，可记为如下形式：</p>
+<p><span class="math display">\[
+   T=S
+   \begin{bmatrix} 1&amp;0&amp;-\bar{u}\\0&amp;1&amp;-\bar{v}\\0&amp;0&amp;\frac{1}{S} \end{bmatrix}
+\]</span> 其中，<span class="math inline">\(\bar{u},\bar{v}\)</span>是图像点坐标两个分量的平均值</p>
+<p><span class="math display">\[
+   \bar{u}=\frac{1}{N}\sum_{i=1}^N u_i,\bar{v}=\frac{1}{N}\sum_{i=1}^N v_i
+\]</span></p>
+<p>S表示尺度，其表达式为：</p>
+<p><span class="math display">\[
+   S=\frac{\sqrt{2}\cdot N}{\sqrt{\sum_{i=1}^N (u_i-\bar{u})^2+(v_i-\bar{v})^2}}
+\]</span></p>
+<p><strong>注：这里的公式很多网上的博客都错了，分子的N应该在根号外面，这样平均距离才是<span class="math inline">\(\sqrt{2}\)</span>,OpenCV的八点法归一化函数也是这样做的</strong></p>
+<p>这样，首先对原始的图像坐标进行归一化处理，再利用8点法求解基础矩阵，最后将求得的结果解除归一化，得到基础矩阵F，总结如下：</p>
+<ul>
+<li>对图像1进行归一化处理，计算一个只包含平移和缩放的变换<span class="math inline">\(T_1\)</span>，将图像1中的匹配点集<span class="math inline">\(p_i^1\)</span>变换到新的点集<span class="math inline">\(\hat{p_i^1}\)</span>，新点集的形心位于原点<span class="math inline">\((0,0)^T\)</span>，并且它们到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。</li>
+<li>对图像2，计算变换矩阵<span class="math inline">\(T_2\)</span>进行相同的归一化处理</li>
+<li>使用8点法利用变换后的点集估计基础矩阵<span class="math inline">\(\hat{F}\)</span></li>
+<li>建立变换<span class="math inline">\(F=T^T_2\hat{F} T_1\)</span></li>
+</ul>
+<p>对单应矩阵的归一化处理同理，总结如下：</p>
+<ul>
+<li>对图像1进行归一化处理，计算一个只包含平移和缩放的变换<span class="math inline">\(T_1\)</span>，将图像1中的匹配点集<span class="math inline">\(p_i^1\)</span>变换到新的点集<span class="math inline">\(\hat{p_i^1}\)</span>，新点集的形心位于原点<span class="math inline">\((0,0)^T\)</span>，并且它们到原点的平均距离是<span class="math inline">\(\sqrt{2}\)</span>。</li>
+<li>对图像2，计算变换矩阵<span class="math inline">\(T_2\)</span>进行相同的归一化处理</li>
+<li>使用8点法利用变换后的点集估计基础矩阵<span class="math inline">\(\hat{H}\)</span></li>
+<li>建立变换<span class="math inline">\(H=T^{-1}_2 \hat{H}T_1\)</span></li>
+</ul>
+<p>ORB-SLAM2中的归一化操作与论文中的不同，是采取了一阶矩进行归一化，具体来说就是缩放因子分别为</p>
+<p><span class="math display">\[
+   sX=\frac{N}{\sum_{i=1}^N \begin{vmatrix}u_i-\bar{u} \end{vmatrix}},
+   sY=\frac{N}{\sum_{i=1}^N \begin{vmatrix}v_i-\bar{v} \end{vmatrix}}
+\]</span></p>
+<p>至于为什么这样做，还没搞明白。</p>
 ]]></content>
       <categories>
         <category>Computer Version</category>
