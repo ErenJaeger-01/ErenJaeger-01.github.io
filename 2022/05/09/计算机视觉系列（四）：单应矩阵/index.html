@@ -149,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E5%BA%94%E7%9F%A9%E9%98%B5"><span class="nav-number">1.</span> <span class="nav-text">单应矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8D%95%E5%BA%94%E7%9F%A9%E9%98%B5%E6%81%A2%E5%A4%8D%E4%BD%8D%E5%A7%BFrt"><span class="nav-number">2.</span> <span class="nav-text">通过单应矩阵恢复位姿\(R,t\)</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E5%BA%94%E7%9F%A9%E9%98%B5"><span class="nav-number">1.</span> <span class="nav-text">单应矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8D%95%E5%BA%94%E7%9F%A9%E9%98%B5%E6%81%A2%E5%A4%8D%E4%BD%8D%E5%A7%BF-R-t"><span class="nav-number">2.</span> <span class="nav-text">通过单应矩阵恢复位姿$R,t$</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -304,130 +304,100 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="单应矩阵">单应矩阵</h3>
-<p>单应矩阵约束了同一3D空间点在两个像素平面上的2D坐标，本质上是射影平面上的可逆齐次线性变换。对于特征点对<span class="math inline">\(p_1,p_2\)</span>，用单应矩阵<span class="math inline">\(H21\)</span>描述特征点对之间的变换关系，有：</p>
-<p><span class="math display">\[\begin{equation}
+        <h3 id="单应矩阵"><a href="#单应矩阵" class="headerlink" title="单应矩阵"></a>单应矩阵</h3><p>单应矩阵约束了同一3D空间点在两个像素平面上的2D坐标，本质上是射影平面上的可逆齐次线性变换。对于特征点对$p_1,p_2$，用单应矩阵$H21$描述特征点对之间的变换关系，有：</p>
+<script type="math/tex; mode=display">\begin{equation}
     p_2=H_{21}*p_1 \tag{1}
-\end{equation}\]</span></p>
-<p>其中<span class="math inline">\(H_{21}\)</span>中的“21”表示从1到2的单应矩阵，也就是指“把坐标系2中的向量变换到坐标系1中”。下称矩阵形式，有</p>
-<p><span class="math display">\[
+\end{equation}</script><p>其中$H_{21}$中的“21”表示从1到2的单应矩阵，也就是指“把坐标系2中的向量变换到坐标系1中”。下称矩阵形式，有</p>
+<script type="math/tex; mode=display">
  \begin{equation} 
     \begin{bmatrix} u_2\\v_2\\1 \end{bmatrix}=
-    \begin{bmatrix} h_1&amp;h_2&amp;h_3\\h_4&amp;h_5&amp;h_6\\h_7&amp;h_8&amp;h_9 \end{bmatrix}
+    \begin{bmatrix} h_1&h_2&h_3\\h_4&h_5&h_6\\h_7&h_8&h_9 \end{bmatrix}
     \begin{bmatrix} u_1\\v_1\\1 \end{bmatrix} \tag{2}
- \end{equation}
-\]</span></p>
-<p>两边左侧叉乘<span class="math inline">\(p_2\)</span>，则等式左侧为0，右侧向量叉乘转换为反对称矩阵，得到下式</p>
-<p><span class="math display">\[
+ \end{equation}</script><p> 两边左侧叉乘$p_2$，则等式左侧为0，右侧向量叉乘转换为反对称矩阵，得到下式</p>
+<script type="math/tex; mode=display">
  \begin{equation} 
-    \begin{bmatrix} 0&amp;-1&amp;v_2\\1&amp;0&amp;-u_2\\-v_2&amp;u_2&amp;0 \end{bmatrix}
-    \begin{bmatrix} h_1&amp;h_2&amp;h_3\\h_4&amp;h_5&amp;h_6\\h_7&amp;h_8&amp;h_9 \end{bmatrix}
+    \begin{bmatrix} 0&-1&v_2\\1&0&-u_2\\-v_2&u_2&0 \end{bmatrix}
+    \begin{bmatrix} h_1&h_2&h_3\\h_4&h_5&h_6\\h_7&h_8&h_9 \end{bmatrix}
     \begin{bmatrix} u_1\\v_1\\1 \end{bmatrix}=0 
     \tag{3}
- \end{equation}
-\]</span></p>
-<p>展开计算，有</p>
-<p><span class="math display">\[   u_2=(h_1*u_1+h_2*v_1+h_3)/(h_7*u_1+h_8*v_1+h_9) \]</span> <span class="math display">\[
+ \end{equation}</script><p>展开计算，有</p>
+<script type="math/tex; mode=display">u_2=(h_1*u_1+h_2*v_1+h_3)/(h_7*u_1+h_8*v_1+h_9)</script><script type="math/tex; mode=display">
 \begin{equation}  
    v_2=(h_4*u_1+h_5*v_1+h_6)/(h_7*u_1+h_8*v_1+h_9)
    \tag{4} 
-\end{equation}
-\]</span></p>
-<p>两边乘分母，得到</p>
-<p><span class="math display">\[   h_1*u_1+h_2*v_1+h_3-(h_7*u_1*u_2+h_8*v_1*u_2+h_9*u_2)=0 \]</span> <span class="math display">\[
+\end{equation}</script><p>两边乘分母，得到</p>
+<script type="math/tex; mode=display">h_1*u_1+h_2*v_1+h_3-(h_7*u_1*u_2+h_8*v_1*u_2+h_9*u_2)=0</script><script type="math/tex; mode=display">
 \begin{equation}  
    -(h_4*u_1+h_5*v_1+h_6)+(h_7*u_1*v_2+h_8*v_1*v_2+h_9*v_2)=0
    \tag{5} 
-\end{equation}
-\]</span></p>
-<p>转化为矩阵形式，有</p>
-<p><span class="math display">\[
+\end{equation}</script><p>转化为矩阵形式，有</p>
+<script type="math/tex; mode=display">
  \begin{equation} 
-    \begin{bmatrix} u_1&amp;v_1&amp;1&amp;0&amp;0&amp;0&amp;-u_1*u_2&amp;-v_1*u_2&amp;-u_2\\0&amp;0&amp;0&amp;-u_1&amp;-v_1&amp;-1&amp;u_1*v_2&amp;v_1*v_2&amp;v_2 \end{bmatrix}
+    \begin{bmatrix} u_1&v_1&1&0&0&0&-u_1*u_2&-v_1*u_2&-u_2\\0&0&0&-u_1&-v_1&-1&u_1*v_2&v_1*v_2&v_2 \end{bmatrix}
     \begin{bmatrix} h_1\\h_2\\h_3\\h_4\\h_5\\h_6\\h_7\\h_8\\h_9 \end{bmatrix}=0 
     \tag{6}
- \end{equation}
-\]</span></p>
-<p>令第一项为<span class="math inline">\(A\)</span>,第二项为<span class="math inline">\(X\)</span>，则有</p>
-<p><span class="math display">\[
+ \end{equation}</script><p>令第一项为$A$,第二项为$X$，则有</p>
+<script type="math/tex; mode=display">
  \begin{equation} 
     AX=0
     \tag{7}
- \end{equation}
-\]</span></p>
-<p>这样，每对特征点提供两个约束，<span class="math inline">\(H\)</span>共有9个元素，由于变换是齐次的，所以同一个单应矩阵<span class="math inline">\(H\)</span>可以相差一个非零常数因子，因此一个单应矩阵有8个自由度，理论上提供四对点形成8个约束方程就可以求解。</p>
-<h3 id="通过单应矩阵恢复位姿rt">通过单应矩阵恢复位姿<span class="math inline">\(R,t\)</span></h3>
-<p>从定义出发，单应矩阵通常描述处于共同平面的一些点在两张图像之间的变换关系。设图像<span class="math inline">\(I_1,I_2\)</span>有一对匹配好的特征点<span class="math inline">\(p_1,p_2\)</span>，这个特征点落在平面P上，设这个平面满足方程</p>
-<p><span class="math display">\[
-   n^TP+d=0
-\]</span></p>
-<p>整理得到</p>
-<p><span class="math display">\[
-   -\frac{n^TP}{d}=1
-\]</span></p>
-<p>又因为</p>
-<p><span class="math display">\[
-   s_1p_1=KP,s_2p_2=K(RP+t)
-\]</span></p>
-<p>有</p>
-<p><span class="math display">\[
-   p_2\simeq K(RP+t)\simeq K(RP+t \cdot (-\frac{n^TP}{d}))\simeq K(R-\frac{n^T}{d}P\simeq K(R-\frac{tn^T}{d})K^{-1}p_1
-\]</span></p>
-<p>从上面可以看出，单应矩阵<span class="math inline">\(H_{21}\)</span>就是等式右边那一坨,设那一坨是A，A就包含了<span class="math inline">\(R，t\)</span>的信息。</p>
-<p>对H进行奇异值分解，会得到8组解<span class="math inline">\(R,T\)</span>，选出3D点在相机前方最多的解为最优解</p>
+ \end{equation}</script><p>这样，每对特征点提供两个约束，$H$共有9个元素，由于变换是齐次的，所以同一个单应矩阵$H$可以相差一个非零常数因子，因此一个单应矩阵有8个自由度，理论上提供四对点形成8个约束方程就可以求解。</p>
+<h3 id="通过单应矩阵恢复位姿-R-t"><a href="#通过单应矩阵恢复位姿-R-t" class="headerlink" title="通过单应矩阵恢复位姿$R,t$"></a>通过单应矩阵恢复位姿$R,t$</h3><p>从定义出发，单应矩阵通常描述处于共同平面的一些点在两张图像之间的变换关系。设图像$I_1,I_2$有一对匹配好的特征点$p_1,p_2$，这个特征点落在平面P上，设这个平面满足方程</p>
+<script type="math/tex; mode=display">
+   n^TP+d=0</script><p>整理得到</p>
+<script type="math/tex; mode=display">
+   -\frac{n^TP}{d}=1</script><p>又因为</p>
+<script type="math/tex; mode=display">
+   s_1p_1=KP,s_2p_2=K(RP+t)</script><p>有</p>
+<script type="math/tex; mode=display">
+   p_2\simeq K(RP+t)\simeq K(RP+t \cdot (-\frac{n^TP}{d}))\simeq K(R-\frac{n^T}{d}P\simeq K(R-\frac{tn^T}{d})K^{-1}p_1</script><p>从上面可以看出，单应矩阵$H_{21}$就是等式右边那一坨,设那一坨是A，A就包含了$R，t$的信息。</p>
+<p>对H进行奇异值分解，会得到8组解$R,T$，选出3D点在相机前方最多的解为最优解</p>
 <p>Q：为什么是八组解？</p>
 <p>A：已知约束条件</p>
 <ul>
-<li><span class="math inline">\(d_1\ge d_2 \ge d_3\)</span></li>
-<li><span class="math inline">\(\sum_{i=1}^3x_i^2=1\)</span></li>
+<li>$d_1\ge d_2 \ge d_3$</li>
+<li>$\sum_{i=1}^3x_i^2=1$ </li>
 </ul>
-<p>其中，<span class="math inline">\(d_i\)</span>是奇异值，<span class="math inline">\(x_i\)</span>是单位法向量n的坐标，所以平方和为1.</p>
+<p>其中，$d_i$是奇异值，$x_i$是单位法向量n的坐标，所以平方和为1.</p>
 <p>根据上面条件求解线性方程组，使其有非零解</p>
-<p><span class="math display">\[
+<script type="math/tex; mode=display">
 \left\{\begin{array}{l}
 \left(d^{\prime 2}-d_{2}^{2}\right) x_{1}^{2}+\left(d^{\prime 2}-d_{1}^{2}\right) x_{2}^{2}=0 \\
 \left(d^{\prime 2}-d_{3}^{2}\right) x_{2}^{2}+\left(d^{\prime 2}-d_{2}^{2}\right) x_{3}^{2}=0 \\
 \left(d^{\prime 2}-d_{1}^{2}\right) x_{3}^{2}+\left(d^{\prime 2}-d_{3}^{2}\right) x_{1}^{2}=0
-\end{array}\right.
-\]</span></p>
-<p>那么根据线性代数的知识可以知道，该线性方程组的行列式必须为0，即</p>
-<p><span class="math display">\[
-   (d^{&#39;2}-d_1^2)(d^{&#39;2}-d_2^2)(d^{&#39;2}-d_3^2)=0
-\]</span></p>
-<p>逐个分析<span class="math inline">\(d^{&#39;}\)</span>的取值</p>
+\end{array}\right.</script><p>那么根据线性代数的知识可以知道，该线性方程组的行列式必须为0，即</p>
+<script type="math/tex; mode=display">
+   (d^{'2}-d_1^2)(d^{'2}-d_2^2)(d^{'2}-d_3^2)=0</script><p>逐个分析$d^{‘}$的取值</p>
 <ul>
-<li><p><span class="math inline">\(d^{&#39;}=\pm d_1\)</span></p>
-<p>唯一解为:<span class="math inline">\(x_1=x_2=x_3=0\)</span>，不满足第二个条件</p></li>
-<li><p><span class="math inline">\(d^{&#39;}=\pm d_3\)</span></p>
-<p>唯一解为:<span class="math inline">\(x_1=x_2=x_3=0\)</span>，不满足第二个条件</p></li>
-<li><p><span class="math inline">\(d^{&#39;}=\pm d_2且d_1 \ne d_3\)</span></p>
-<p>有四组解：</p></li>
+<li><p>$d^{‘}=\pm d_1$</p>
+<p> 唯一解为:$x_1=x_2=x_3=0$，不满足第二个条件</p>
+</li>
+<li><p>$d^{‘}=\pm d_3$</p>
+<p> 唯一解为:$x_1=x_2=x_3=0$，不满足第二个条件</p>
+</li>
+<li><p>$d^{‘}=\pm d_2且d_1 \ne d_3$</p>
+<p> 有四组解：</p>
+</li>
 </ul>
-<p><span class="math display">\[
+<script type="math/tex; mode=display">
 \left\{\begin{array}{l}
 x_{1}=\varepsilon_{1} \sqrt{\frac{d_{1}^{2}-d_{2}^{2}}{d_{1}^{2}-d_{3}^{2}}} \\
 x_{2}=0 \\
 x_{3}=\varepsilon_{3} \sqrt{\frac{d_{2}^{2}-d_{3}^{2}}{d_{1}^{1}-d_{3}^{2}}}
-\end{array}\right.
-\]</span></p>
-<p>又，对于平移向量的公式</p>
+\end{array}\right.</script><p>又，对于平移向量的公式</p>
 <ul>
-<li><span class="math inline">\(d^{&#39;}&gt;0\)</span></li>
+<li>$d^{‘}&gt;0$</li>
 </ul>
-<p><span class="math display">\[
-   t^{&#39;}=(d_1-d_3)\begin{pmatrix}
+<script type="math/tex; mode=display">
+   t^{'}=(d_1-d_3)\begin{pmatrix}
       x_1 \\ 0 \\ -x_3     
-   \end{pmatrix}
-\]</span></p>
-<ul>
-<li><span class="math inline">\(d^{&#39;}&lt;0\)</span></li>
+   \end{pmatrix}</script><ul>
+<li>$d^{‘}&lt;0$</li>
 </ul>
-<p><span class="math display">\[
-   t^{&#39;}=(d_1+d_3)\begin{pmatrix}
+<script type="math/tex; mode=display">
+   t^{'}=(d_1+d_3)\begin{pmatrix}
       x_1 \\ 0 \\ x_3     
-   \end{pmatrix}
-\]</span></p>
-<p>可以看出，平移向量和每组解都有联系，因此就成了2*4=8组解，选出3D点在相机前方最多的解为最优解。</p>
+   \end{pmatrix}</script><p>可以看出，平移向量和每组解都有联系，因此就成了2*4=8组解，选出3D点在相机前方最多的解为最优解。</p>
 
     </div>
 

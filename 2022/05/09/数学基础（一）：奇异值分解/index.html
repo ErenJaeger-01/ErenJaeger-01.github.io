@@ -34,7 +34,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://erenjaeger-01.github.io/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/奇异值分解.png">
 <meta property="article:published_time" content="2022-05-09T13:13:49.000Z">
-<meta property="article:modified_time" content="2022-05-09T13:14:45.959Z">
+<meta property="article:modified_time" content="2022-05-10T03:09:13.701Z">
 <meta property="article:author" content="张凯翔">
 <meta property="article:tag" content="Math">
 <meta name="twitter:card" content="summary">
@@ -151,7 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3svd"><span class="nav-number">1.</span> <span class="nav-text">奇异值分解SVD</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3SVD"><span class="nav-number">1.</span> <span class="nav-text">奇异值分解SVD</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -275,9 +275,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-05-09 21:13:49 / 修改时间：21:14:45" itemprop="dateCreated datePublished" datetime="2022-05-09T21:13:49+08:00">2022-05-09</time>
+      <time title="创建时间：2022-05-09 21:13:49" itemprop="dateCreated datePublished" datetime="2022-05-09T21:13:49+08:00">2022-05-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-10 11:09:13" itemprop="dateModified" datetime="2022-05-10T11:09:13+08:00">2022-05-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -306,45 +312,32 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="奇异值分解svd">奇异值分解SVD</h3>
-<p>SVD分解定义</p>
-<p><span class="math display">\[
-   A=U\sum{}V^T
-\]</span></p>
-<p>其中，A是<span class="math inline">\(m\times n\)</span>的矩阵，根据奇异值分解后，U是<span class="math inline">\(m\times m\)</span>的矩阵，<span class="math inline">\(\sum{}\)</span>是一个<span class="math inline">\(m\times n\)</span>的矩阵，除主对角线上的元素以外全部为0，主对角线上的每个元素都称为奇异值，V是一个<span class="math inline">\(n\times n\)</span>的矩阵，U和V都是酉矩阵，即满足</p>
-<p><span class="math display">\[
-U^TU=I,V^TV=I
-\]</span></p>
-<p>可以用下图表示奇异值分解：</p>
-<figure>
-<img src="/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/奇异值分解.png" alt="奇异值分解"><figcaption aria-hidden="true">奇异值分解</figcaption>
-</figure>
-<p>对于奇异值,它跟我们特征分解中的特征值类似，在奇异值矩阵中也是按照从大到小排列，而且奇异值的减少特别的快，在很多情况下，前10%甚至1%的奇异值的和就占了全部的奇异值之和的99%以上的比例。 也就是说，我们也可以用最大的k个的奇异值和对应的左右奇异向量来近似描述矩阵。也就是说：</p>
-<p><span class="math display">\[
-   A_{m\times n}=U_{m\times n}\sum{}_{m\times n}V^T_{n\times n}\approx U_{m\times k}\sum{}_{k\times k}V^T_{k\times n}
-\]</span></p>
-<p>其中k比n小很多，也就是一个大矩阵A可以用三个小矩阵<span class="math inline">\(U_{m\times k},\sum{}_{k\times k},V^T_{k\times n}\)</span>来表示。</p>
+        <h3 id="奇异值分解SVD"><a href="#奇异值分解SVD" class="headerlink" title="奇异值分解SVD"></a>奇异值分解SVD</h3><p>SVD分解定义</p>
+<script type="math/tex; mode=display">
+   A=U\sum{}V^T</script><p>其中，A是$m\times n$的矩阵，根据奇异值分解后，U是$m\times m$的矩阵，$\sum{}$是一个$m\times n$的矩阵，除主对角线上的元素以外全部为0，主对角线上的每个元素都称为奇异值，V是一个$n\times n$的矩阵，U和V都是酉矩阵，即满足</p>
+<script type="math/tex; mode=display">
+U^TU=I,V^TV=I</script><p>可以用下图表示奇异值分解：</p>
+<p><img src="/2022/05/09/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3/奇异值分解.png" alt="奇异值分解"></p>
+<p>对于奇异值,它跟我们特征分解中的特征值类似，在奇异值矩阵中也是按照从大到小排列，而且奇异值的减少特别的快，在很多情况下，前10%甚至1%的奇异值的和就占了全部的奇异值之和的99%以上的比例。<br>也就是说，我们也可以用最大的k个的奇异值和对应的左右奇异向量来近似描述矩阵。也就是说：</p>
+<script type="math/tex; mode=display">
+   A_{m\times n}=U_{m\times n}\sum{}_{m\times n}V^T_{n\times n}\approx U_{m\times k}\sum{}_{k\times k}V^T_{k\times n}</script><p>其中k比n小很多，也就是一个大矩阵A可以用三个小矩阵$U<em>{m\times k},\sum{}</em>{k\times k},V^T_{k\times n}$来表示。</p>
 <p>SVD求解最小二乘问题：</p>
-<p><span class="math display">\[
+<script type="math/tex; mode=display">
    min\begin{Vmatrix}
       Ax-b
-   \end{Vmatrix}^2,A\in R^{m\times n},x\in R^{n},b\in R^{m}
-\]</span></p>
-<p>m个方程求n个未知数，有三种情况：</p>
+   \end{Vmatrix}^2,A\in R^{m\times n},x\in R^{n},b\in R^{m}</script><p>m个方程求n个未知数，有三种情况：</p>
 <ul>
-<li><span class="math inline">\(m=n\)</span>且A非奇异，则有唯一解（线性代数学到的）</li>
-<li><span class="math inline">\(m&gt;n\)</span>，约束的个数超过未知数个数，称为超定问题</li>
-<li><span class="math inline">\(m&lt;n\)</span>，约束的个数小于未知数个数，称为负定/欠定问题</li>
+<li>$m=n$且A非奇异，则有唯一解（线性代数学到的）</li>
+<li>$m&gt;n$，约束的个数超过未知数个数，称为超定问题</li>
+<li>$m&lt;n$，约束的个数小于未知数个数，称为负定/欠定问题</li>
 </ul>
 <p>通常我们遇到的都是超定问题，此时是没有解的，从而转向最小二乘问题：</p>
-<p><span class="math display">\[
+<script type="math/tex; mode=display">
    J(x)=min\begin{Vmatrix}
       Ax-b
-   \end{Vmatrix}^2
-\]</span></p>
-<p>懒得敲公式了。上个链接 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/436753966">奇异值分解与最小二乘法</a></p>
-<p>总结一下结论，对于<span class="math inline">\(Ax=0\)</span></p>
-<p>SVD分解之后得到的V最右侧的列向量(也就是<span class="math inline">\(V^T最下方的行向量\)</span>)就是一般性齐次线性方程组<span class="math inline">\(Ax=0\)</span>的解。</p>
+   \end{Vmatrix}^2</script><p>懒得敲公式了。上个链接<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/436753966">奇异值分解与最小二乘法</a></p>
+<p>总结一下结论，对于$Ax=0$</p>
+<p>SVD分解之后得到的V最右侧的列向量(也就是$V^T最下方的行向量$)就是一般性齐次线性方程组$Ax=0$的解。</p>
 
     </div>
 
